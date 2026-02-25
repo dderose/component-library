@@ -43,7 +43,7 @@ export default function AccordionScreen() {
       new AccordionLogic({
         items,
         initialExpanded: ["what"],
-        multiple: false,
+        multiple: true,
         collapsible: true,
       })
   );

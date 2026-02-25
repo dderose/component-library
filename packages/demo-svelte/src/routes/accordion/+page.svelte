@@ -33,7 +33,7 @@
   const logic = new AccordionLogic({
     initialExpanded: ["what"],
     items,
-    multiple: false,
+    multiple: true,
     collapsible: true,
   });
 
