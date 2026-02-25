@@ -25,5 +25,5 @@ export type { MultiSelectState, MultiSelectOption, MultiSelectAria, MultiSelectO
 export { ModalLogic, getFocusableElements, trapFocus, lockScroll, unlockScroll, resetModalIdCounter } from "./components/modal";
 export type { ModalState, ModalStatus, ModalAria, ModalOptions } from "./components/modal";
 
-export { AccordionLogic } from "./components/accordion";
-export type { AccordionState, AccordionOptions } from "./components/accordion";
+export { AccordionLogic, resetAccordionIdCounter } from "./components/accordion";
+export type { AccordionState, AccordionItem, AccordionAria, AccordionOptions } from "./components/accordion";
