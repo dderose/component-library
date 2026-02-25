@@ -39,7 +39,7 @@
               {options.find((o) => o.value === tag)?.label}
               <button
                 class="tag-remove"
-                onclick|stopPropagation={() => logic.deselect(tag)}
+                onclick={(e) => { e.stopPropagation(); logic.deselect(tag); }}
               >
                 ×
               </button>
