@@ -18,6 +18,7 @@
     <a href="/multi-select">MultiSelect</a>
     <a href="/modal">Modal</a>
     <a href="/accordion">Accordion</a>
+    <a href="/contact-form">Contact Form</a>
   </nav>
 
   <main>
