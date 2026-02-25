@@ -29,7 +29,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="overlay" onclick={() => logic.handleOverlayClick()}>
     <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div class="modal" onclick|stopPropagation>
+    <div class="modal" onclick={(e) => e.stopPropagation()}>
       <div class="modal-header">
         <h3>Example Modal</h3>
         <button class="close-btn" onclick={() => logic.close()}>×</button>
