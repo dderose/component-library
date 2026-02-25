@@ -1,56 +1,162 @@
 /**
  * @component-library/css — Design tokens
  *
+ * Default theme derived from Moon Design System (moon.io).
  * Override any of these on :root or a wrapper element to theme all components.
  * Every component style references these tokens exclusively.
+ *
+ * Moon DS uses Dragon Ball Z character names for its semantic color roles:
+ *   piccolo → accent/primary    beerus → borders     goku → page bg
+ *   gohan   → surface bg        bulma  → text        trunks → muted text
+ *   krillin → warning           chichi → error/danger roshi → success
+ *
+ * We map these to our `--cl-*` semantic names so consumers don't need to
+ * learn Moon's naming convention — but the values match exactly.
  */
 
 :root {
-  /* ---- Colors ---- */
-  --cl-color-bg: #fafafa;
-  --cl-color-surface: #ffffff;
-  --cl-color-text: #1a1a1a;
-  --cl-color-text-muted: #6b7280;
-  --cl-color-border: #e0e0e0;
-  --cl-color-border-focus: #4f46e5;
-  --cl-color-primary: #4f46e5;
-  --cl-color-primary-hover: #4338ca;
-  --cl-color-primary-text: #ffffff;
-  --cl-color-error: #dc2626;
-  --cl-color-error-bg: #fef2f2;
-  --cl-color-success: #16a34a;
-  --cl-color-success-bg: #f0fdf4;
-  --cl-color-success-border: #bbf7d0;
+  /* ---- Core colors (from Moon light theme) ---- */
+  --cl-color-primary: #5c33cf;           /* piccolo */
+  --cl-color-primary-hover: #4e2bb5;     /* piccolo darkened */
+  --cl-color-primary-text: #ffffff;      /* goten (forced white) */
+  --cl-color-accent: #1bd29a;            /* hit */
 
-  /* ---- Spacing ---- */
-  --cl-spacing-xs: 0.25rem;
-  --cl-spacing-sm: 0.5rem;
-  --cl-spacing-md: 0.75rem;
-  --cl-spacing-lg: 1rem;
-  --cl-spacing-xl: 1.25rem;
+  --cl-color-bg: #ffffff;                /* goku */
+  --cl-color-surface: #f6f7f9;          /* gohan */
+  --cl-color-text: #000000;              /* bulma */
+  --cl-color-text-muted: #687083;        /* trunks */
+  --cl-color-border: #dcdee3;            /* beerus */
+  --cl-color-border-focus: #5c33cf;      /* piccolo */
+
+  /* ---- Semantic / feedback colors ---- */
+  --cl-color-error: #ff4e64;             /* chichi */
+  --cl-color-error-bg: rgba(255, 78, 100, 0.08);   /* chichi-10 */
+  --cl-color-error-muted: rgba(255, 78, 100, 0.56); /* chichi-60 */
+
+  --cl-color-warning: #ffb319;           /* krillin */
+  --cl-color-warning-bg: rgba(255, 179, 25, 0.08);  /* krillin-10 */
+  --cl-color-warning-muted: rgba(255, 179, 25, 0.56); /* krillin-60 */
+
+  --cl-color-success: #49b356;           /* roshi */
+  --cl-color-success-bg: rgba(73, 179, 86, 0.08);   /* roshi-10 */
+  --cl-color-success-border: rgba(73, 179, 86, 0.56); /* roshi-60 */
+
+  /* ---- Extended palette ---- */
+  --cl-color-info: #3448f0;              /* whis */
+  --cl-color-info-bg: rgba(52, 72, 240, 0.08);      /* whis-10 */
+
+  /* ---- Overlays ---- */
+  --cl-color-overlay: rgba(0, 0, 0, 0.56);          /* zeno */
+  --cl-color-highlight: rgba(92, 51, 207, 0.12);    /* jiren */
+
+  /* ---- Spacing (Moon's newTokens.space scale) ---- */
+  --cl-spacing-3xs: 0.25rem;    /*  4px — threexsmall */
+  --cl-spacing-2xs: 0.5rem;     /*  8px — twoxsmall */
+  --cl-spacing-xs: 0.75rem;     /* 12px — xsmall */
+  --cl-spacing-sm: 1rem;        /* 16px — small */
+  --cl-spacing-md: 1.5rem;      /* 24px — medium */
+  --cl-spacing-lg: 2rem;        /* 32px — large */
+  --cl-spacing-xl: 2.5rem;      /* 40px — xlarge */
+  --cl-spacing-2xl: 3rem;       /* 48px — twoxlarge */
 
   /* ---- Typography ---- */
-  --cl-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --cl-font-size-sm: 0.8rem;
-  --cl-font-size-base: 0.875rem;
-  --cl-font-size-lg: 1rem;
+  --cl-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --cl-font-size-sm: 0.75rem;   /* 12px */
+  --cl-font-size-base: 0.875rem; /* 14px — Moon's body default */
+  --cl-font-size-lg: 1rem;      /* 16px */
+  --cl-font-weight-normal: 400;
+  --cl-font-weight-semibold: 500;
+  --cl-line-height: 1.5rem;     /* 24px */
 
-  /* ---- Borders & Radius ---- */
-  --cl-radius-sm: 3px;
-  --cl-radius-md: 6px;
-  --cl-radius-lg: 8px;
+  /* ---- Border radius (Moon's interactive + surface radii) ---- */
+  --cl-radius-xs: 0.25rem;      /*  4px — i-xs / s-xs */
+  --cl-radius-sm: 0.375rem;     /*  6px — small */
+  --cl-radius-md: 0.5rem;       /*  8px — i-sm / s-sm / medium */
+  --cl-radius-lg: 0.75rem;      /* 12px — i-md / s-md / large */
+  --cl-radius-xl: 1rem;         /* 16px — s-lg / xlarge */
+  --cl-radius-full: 624.9375rem; /* 9999px — full/pill */
 
-  /* ---- Shadows ---- */
-  --cl-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --cl-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --cl-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+  /* ---- Border ---- */
+  --cl-border-width: 0.0625rem;  /* 1px — default */
+  --cl-border-width-interactive: 0.125rem; /* 2px — interactive */
+
+  /* ---- Shadows (Moon's box-shadow scale) ---- */
+  --cl-shadow-sm: 0 6px 6px -6px rgba(0, 0, 0, 0.16),
+    0 0 1px rgba(0, 0, 0, 0.4);
+  --cl-shadow-md: 0 12px 12px -6px rgba(0, 0, 0, 0.16),
+    0 0 1px rgba(0, 0, 0, 0.4);
+  --cl-shadow-lg: 0 8px 24px -6px rgba(0, 0, 0, 0.16),
+    0 0 1px rgba(0, 0, 0, 0.4);
+  --cl-shadow-xl: 0 32px 32px -8px rgba(0, 0, 0, 0.08),
+    0 0 32px -8px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.2);
 
   /* ---- Focus ring ---- */
-  --cl-focus-ring: 0 0 0 2px rgba(79, 70, 229, 0.15);
+  --cl-focus-ring: 0 0 0 2px rgba(92, 51, 207, 0.15);
   --cl-focus-outline: 2px solid var(--cl-color-border-focus);
 
-  /* ---- Transitions ---- */
-  --cl-transition-fast: 100ms ease;
-  --cl-transition-base: 150ms ease;
-  --cl-transition-slow: 200ms ease;
+  /* ---- Transitions (Moon's transition tokens) ---- */
+  --cl-transition-fast: 0.2s ease-in-out;   /* default */
+  --cl-transition-base: 0.2s ease-in-out;
+  --cl-transition-slow: 0.4s ease-in-out;   /* slow */
+
+  /* ---- Opacity ---- */
+  --cl-opacity-disabled: 0.6;               /* opacity-moon */
+}
+
+/* ---- Dark theme ---- */
+.cl-dark {
+  --cl-color-primary: #5c33cf;           /* piccolo (same in dark) */
+  --cl-color-primary-hover: #7a57e0;     /* piccolo lightened for dark bg */
+  --cl-color-primary-text: #ffffff;
+  --cl-color-accent: #1bd29a;            /* hit */
+
+  --cl-color-bg: #0b0b0b;               /* goku dark */
+  --cl-color-surface: #1f1f1f;           /* gohan dark */
+  --cl-color-text: #ffffff;              /* bulma dark */
+  --cl-color-text-muted: #94989e;        /* trunks dark */
+  --cl-color-border: #444444;            /* beerus dark */
+  --cl-color-border-focus: #5c33cf;
+
+  --cl-color-overlay: rgba(0, 0, 0, 0.56);
+  --cl-color-highlight: rgba(92, 51, 207, 0.12);
+
+  /* Darker shadows for dark mode */
+  --cl-shadow-sm: 0 6px 6px -6px rgba(0, 0, 0, 0.64),
+    0 0 1px rgba(0, 0, 0, 0.56);
+  --cl-shadow-md: 0 12px 12px -6px rgba(0, 0, 0, 0.64),
+    0 0 1px rgba(0, 0, 0, 0.56);
+  --cl-shadow-lg: 0 24px 24px -6px rgba(0, 0, 0, 0.64),
+    0 0 1px rgba(0, 0, 0, 0.56);
+  --cl-shadow-xl: 0 48px 48px -6px rgba(0, 0, 0, 0.88),
+    0 0 1px rgba(0, 0, 0, 0.72);
+}
+
+/* Also support prefers-color-scheme for automatic dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not(.cl-light) {
+    --cl-color-primary: #5c33cf;
+    --cl-color-primary-hover: #7a57e0;
+    --cl-color-primary-text: #ffffff;
+    --cl-color-accent: #1bd29a;
+
+    --cl-color-bg: #0b0b0b;
+    --cl-color-surface: #1f1f1f;
+    --cl-color-text: #ffffff;
+    --cl-color-text-muted: #94989e;
+    --cl-color-border: #444444;
+    --cl-color-border-focus: #5c33cf;
+
+    --cl-color-overlay: rgba(0, 0, 0, 0.56);
+    --cl-color-highlight: rgba(92, 51, 207, 0.12);
+
+    --cl-shadow-sm: 0 6px 6px -6px rgba(0, 0, 0, 0.64),
+      0 0 1px rgba(0, 0, 0, 0.56);
+    --cl-shadow-md: 0 12px 12px -6px rgba(0, 0, 0, 0.64),
+      0 0 1px rgba(0, 0, 0, 0.56);
+    --cl-shadow-lg: 0 24px 24px -6px rgba(0, 0, 0, 0.64),
+      0 0 1px rgba(0, 0, 0, 0.56);
+    --cl-shadow-xl: 0 48px 48px -6px rgba(0, 0, 0, 0.88),
+      0 0 1px rgba(0, 0, 0, 0.72);
+  }
 }
