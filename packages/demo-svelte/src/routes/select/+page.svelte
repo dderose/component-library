@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { useLogic } from "@component-library/svelte";
+  import { useLogic, clickOutside, portal } from "@component-library/svelte";
   import { SelectLogic } from "@component-library/core";
+  import type { SelectOption } from "@component-library/core";
 
   type Fruit = "apple" | "banana" | "cherry" | "mango";
-  const options: { value: Fruit; label: string }[] = [
+  const fruits: SelectOption<Fruit>[] = [
     { value: "apple", label: "Apple" },
     { value: "banana", label: "Banana" },
     { value: "cherry", label: "Cherry" },
@@ -16,44 +17,77 @@
   });
 
   const logic = new SelectLogic<Fruit>({
+    options: fruits,
     rules: [required()],
     validateOnBlur: true,
     validateOnChange: false,
   });
 
   const state = useLogic(logic);
+  const { aria } = logic;
 
-  function handleSelect(value: Fruit) {
-    logic.setValue(value);
+  let triggerEl: HTMLButtonElement;
+
+  function getSelectedLabel(): string {
+    const opt = fruits.find((o) => o.value === state.current.value);
+    return opt?.label ?? "";
   }
 </script>
 
 <h2>Select</h2>
 
 <div class="demo">
-  <label class="label">Favorite fruit</label>
+  <label class="label" id={aria.labelId}>Favorite fruit</label>
 
-  <div class="select-wrapper">
-    <button class="select-trigger" onclick={() => logic.toggleMenu()}>
+  <div
+    class="select-wrapper"
+    use:clickOutside={{ handler: () => logic.closeMenu(), enabled: state.current.open }}
+  >
+    <button
+      class="select-trigger"
+      bind:this={triggerEl}
+      role={aria.trigger.role}
+      aria-haspopup={aria.trigger["aria-haspopup"]}
+      aria-expanded={state.current.open}
+      aria-controls={aria.trigger["aria-controls"]}
+      aria-activedescendant={state.current.open && state.current.highlightedIndex >= 0
+        ? aria.optionId(state.current.highlightedIndex)
+        : undefined}
+      aria-labelledby={aria.labelId}
+      onclick={() => logic.toggleMenu()}
+      onkeydown={(e) => logic.handleKeyDown(e)}
+      onfocus={() => logic.focus()}
+      onblur={() => logic.blur()}
+    >
       {#if state.current.value}
-        {options.find((o) => o.value === state.current.value)?.label}
+        <span>{getSelectedLabel()}</span>
       {:else}
         <span class="placeholder">Choose a fruit…</span>
       {/if}
-      <span class="chevron">{state.current.open ? "▲" : "▼"}</span>
+      <span class="chevron" aria-hidden="true">{state.current.open ? "▲" : "▼"}</span>
     </button>
 
     {#if state.current.open}
-      <ul class="dropdown">
-        {#each options as opt}
-          <li>
-            <button
-              class="option"
-              class:selected={state.current.value === opt.value}
-              onclick={() => handleSelect(opt.value)}
-            >
-              {opt.label}
-            </button>
+      <ul
+        class="dropdown"
+        role={aria.listbox.role}
+        id={aria.listbox.id}
+        aria-labelledby={aria.labelId}
+        use:portal
+      >
+        {#each fruits as opt, i}
+          <li
+            id={aria.optionId(i)}
+            role="option"
+            aria-selected={state.current.value === opt.value}
+            aria-disabled={opt.disabled ?? false}
+            class="option"
+            class:highlighted={state.current.highlightedIndex === i}
+            class:selected={state.current.value === opt.value}
+            onmouseenter={() => logic.highlightIndex(i)}
+            onclick={() => logic.setValue(opt.value)}
+          >
+            {opt.label}
           </li>
         {/each}
       </ul>
@@ -61,7 +95,7 @@
   </div>
 
   {#if !state.current.validation.valid && state.current.touched}
-    <ul class="errors">
+    <ul class="errors" role="alert">
       {#each state.current.validation.errors as err}
         <li>{err}</li>
       {/each}
@@ -72,10 +106,19 @@
     <strong>State:</strong>
     <code>
       value={state.current.value ?? "null"} | open={state.current.open} |
-      touched={state.current.touched} | dirty={state.current.dirty} |
-      valid={state.current.validation.valid}
+      highlighted={state.current.highlightedIndex} |
+      touched={state.current.touched} | valid={state.current.validation.valid}
     </code>
   </div>
+
+  <h3>Keyboard navigation</h3>
+  <ul class="feature-list">
+    <li><kbd>↓</kbd> / <kbd>↑</kbd> — move highlight (opens menu if closed)</li>
+    <li><kbd>Enter</kbd> / <kbd>Space</kbd> — select highlighted option or open menu</li>
+    <li><kbd>Escape</kbd> — close menu</li>
+    <li><kbd>Home</kbd> / <kbd>End</kbd> — jump to first / last option</li>
+    <li><kbd>Tab</kbd> — close menu and move focus</li>
+  </ul>
 
   <div class="actions">
     <button onclick={() => logic.reset()}>Reset</button>
@@ -113,6 +156,10 @@
   .select-trigger:hover {
     border-color: var(--color-text-muted);
   }
+  .select-trigger:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
   .placeholder {
     color: var(--color-text-muted);
   }
@@ -135,15 +182,12 @@
     z-index: 10;
   }
   .option {
-    width: 100%;
     padding: 0.4rem 0.75rem;
-    border: none;
-    background: none;
     font-size: 0.875rem;
-    text-align: left;
     cursor: pointer;
   }
-  .option:hover {
+  .option:hover,
+  .option.highlighted {
     background: var(--color-bg);
   }
   .option.selected {
@@ -154,6 +198,22 @@
     color: var(--color-error);
     font-size: 0.8rem;
     padding-left: 1rem;
+  }
+  .feature-list {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    padding-left: 1.25rem;
+  }
+  .feature-list li + li {
+    margin-top: 0.1rem;
+  }
+  kbd {
+    padding: 0.1rem 0.35rem;
+    font-size: 0.8rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    font-family: inherit;
   }
   .state-debug {
     font-size: 0.75rem;

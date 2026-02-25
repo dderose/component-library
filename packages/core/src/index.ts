@@ -16,11 +16,11 @@ export type { CheckboxState, CheckboxOptions } from "./components/checkbox";
 export { RadioGroupLogic } from "./components/radio-group";
 export type { RadioGroupState, RadioGroupOptions } from "./components/radio-group";
 
-export { SelectLogic } from "./components/select";
-export type { SelectState, SelectOptions } from "./components/select";
+export { SelectLogic, resetSelectIdCounter } from "./components/select";
+export type { SelectState, SelectOption, SelectAria, SelectOptions } from "./components/select";
 
-export { MultiSelectLogic } from "./components/multi-select";
-export type { MultiSelectState, MultiSelectOptions } from "./components/multi-select";
+export { MultiSelectLogic, resetMultiSelectIdCounter } from "./components/multi-select";
+export type { MultiSelectState, MultiSelectOption, MultiSelectAria, MultiSelectOptions } from "./components/multi-select";
 
 export { ModalLogic, getFocusableElements, trapFocus, lockScroll, unlockScroll, resetModalIdCounter } from "./components/modal";
 export type { ModalState, ModalStatus, ModalAria, ModalOptions } from "./components/modal";
