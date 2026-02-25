@@ -1,0 +1,19 @@
+{
+  "name": "@component-library/css",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Framework-agnostic CSS for @component-library components",
+  "files": ["src"],
+  "exports": {
+    ".": "./src/components.css",
+    "./tokens.css": "./src/tokens.css",
+    "./textfield.css": "./src/textfield.css",
+    "./checkbox.css": "./src/checkbox.css",
+    "./radio-group.css": "./src/radio-group.css",
+    "./select.css": "./src/select.css",
+    "./multiselect.css": "./src/multiselect.css",
+    "./button.css": "./src/button.css",
+    "./modal.css": "./src/modal.css",
+    "./accordion.css": "./src/accordion.css"
+  }
+}

@@ -1,0 +1,78 @@
+/**
+ * TextField
+ *
+ * Structure:
+ *   .cl-textfield
+ *     .cl-textfield-label
+ *     .cl-textfield-input
+ *     .cl-textfield-errors
+ *       .cl-textfield-error
+ *
+ * State modifiers (on .cl-textfield):
+ *   .cl-textfield--focused
+ *   .cl-textfield--touched
+ *   .cl-textfield--dirty
+ *   .cl-textfield--invalid
+ */
+
+.cl-textfield {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cl-spacing-sm);
+}
+
+/* ---- Label ---- */
+
+.cl-textfield-label {
+  font-weight: 600;
+  font-size: var(--cl-font-size-base);
+}
+
+/* ---- Input ---- */
+
+.cl-textfield-input {
+  padding: var(--cl-spacing-sm) var(--cl-spacing-md);
+  border: 1px solid var(--cl-color-border);
+  border-radius: var(--cl-radius-md);
+  font-family: var(--cl-font-family);
+  font-size: var(--cl-font-size-base);
+  background: var(--cl-color-surface);
+  color: var(--cl-color-text);
+  outline: none;
+  transition: border-color var(--cl-transition-base), box-shadow var(--cl-transition-base);
+}
+
+.cl-textfield-input::placeholder {
+  color: var(--cl-color-text-muted);
+}
+
+.cl-textfield-input:focus,
+.cl-textfield--focused .cl-textfield-input {
+  border-color: var(--cl-color-border-focus);
+  box-shadow: var(--cl-focus-ring);
+}
+
+.cl-textfield--invalid.cl-textfield--touched .cl-textfield-input {
+  border-color: var(--cl-color-error);
+}
+
+.cl-textfield-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---- Errors ---- */
+
+.cl-textfield-errors {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cl-spacing-xs);
+}
+
+.cl-textfield-error {
+  color: var(--cl-color-error);
+  font-size: var(--cl-font-size-sm);
+}

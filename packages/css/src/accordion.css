@@ -1,0 +1,118 @@
+/**
+ * Accordion
+ *
+ * Structure:
+ *   .cl-accordion
+ *     .cl-accordion-item
+ *       .cl-accordion-header
+ *         .cl-accordion-trigger
+ *           (title text)
+ *           .cl-accordion-chevron
+ *       .cl-accordion-panel
+ *         .cl-accordion-content
+ *
+ * Item modifiers:
+ *   .cl-accordion-item--expanded
+ *   .cl-accordion-item--disabled
+ *
+ * Chevron modifier:
+ *   .cl-accordion-chevron--rotated
+ */
+
+.cl-accordion {
+  border: 1px solid var(--cl-color-border);
+  border-radius: var(--cl-radius-md);
+  overflow: hidden;
+}
+
+/* ---- Item ---- */
+
+.cl-accordion-item + .cl-accordion-item {
+  border-top: 1px solid var(--cl-color-border);
+}
+
+.cl-accordion-item--disabled {
+  opacity: 0.5;
+}
+
+/* ---- Header ---- */
+
+.cl-accordion-header {
+  margin: 0;
+}
+
+/* ---- Trigger ---- */
+
+.cl-accordion-trigger {
+  width: 100%;
+  padding: var(--cl-spacing-md) var(--cl-spacing-lg);
+  border: none;
+  background: var(--cl-color-surface);
+  font-family: var(--cl-font-family);
+  font-size: var(--cl-font-size-base);
+  font-weight: 600;
+  color: var(--cl-color-text);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+  transition: background var(--cl-transition-fast);
+}
+
+.cl-accordion-trigger:hover:not(:disabled) {
+  background: var(--cl-color-bg);
+}
+
+.cl-accordion-trigger:focus-visible {
+  outline: var(--cl-focus-outline);
+  outline-offset: -2px;
+  z-index: 1;
+  position: relative;
+}
+
+.cl-accordion-item--expanded .cl-accordion-trigger {
+  background: var(--cl-color-bg);
+}
+
+.cl-accordion-trigger:disabled {
+  cursor: not-allowed;
+}
+
+/* ---- Chevron ---- */
+
+.cl-accordion-chevron {
+  transition: transform var(--cl-transition-slow);
+  color: var(--cl-color-text-muted);
+  flex-shrink: 0;
+}
+
+.cl-accordion-chevron--rotated {
+  transform: rotate(180deg);
+}
+
+/* ---- Panel (animated) ---- */
+
+.cl-accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--cl-transition-slow);
+}
+
+.cl-accordion-item--expanded .cl-accordion-panel {
+  grid-template-rows: 1fr;
+}
+
+.cl-accordion-content {
+  overflow: hidden;
+}
+
+.cl-accordion-content p,
+.cl-accordion-content div {
+  padding: var(--cl-spacing-md) var(--cl-spacing-lg);
+  margin: 0;
+  font-size: var(--cl-font-size-base);
+  line-height: 1.5;
+  border-top: 1px solid var(--cl-color-border);
+}

@@ -1,0 +1,139 @@
+/**
+ * Modal
+ *
+ * Structure:
+ *   .cl-modal-overlay
+ *     .cl-modal-panel
+ *       .cl-modal-header
+ *         (title)
+ *         .cl-modal-close
+ *       .cl-modal-body
+ *       .cl-modal-footer
+ *
+ * Transition modifiers (on both overlay and panel):
+ *   .cl-modal-overlay--entering
+ *   .cl-modal-overlay--open
+ *   .cl-modal-overlay--leaving
+ *   .cl-modal-panel--entering
+ *   .cl-modal-panel--open
+ *   .cl-modal-panel--leaving
+ */
+
+/* ---- Overlay ---- */
+
+.cl-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0);
+  transition-property: background;
+  transition-timing-function: ease;
+}
+
+.cl-modal-overlay--entering {
+  background: rgba(0, 0, 0, 0);
+}
+
+.cl-modal-overlay--open {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.cl-modal-overlay--leaving {
+  background: rgba(0, 0, 0, 0);
+}
+
+/* ---- Panel ---- */
+
+.cl-modal-panel {
+  outline: none;
+  background: var(--cl-color-surface);
+  border-radius: var(--cl-radius-lg);
+  box-shadow: var(--cl-shadow-lg);
+  width: 90%;
+  max-width: 440px;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.95);
+  transition-property: opacity, transform;
+  transition-timing-function: ease;
+}
+
+.cl-modal-panel--entering {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.cl-modal-panel--open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.cl-modal-panel--leaving {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* ---- Header ---- */
+
+.cl-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--cl-spacing-lg) var(--cl-spacing-xl);
+  border-bottom: 1px solid var(--cl-color-border);
+}
+
+.cl-modal-header h3,
+.cl-modal-header h2 {
+  font-size: var(--cl-font-size-lg);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ---- Close button ---- */
+
+.cl-modal-close {
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: var(--cl-color-text-muted);
+  padding: var(--cl-spacing-xs);
+  line-height: 1;
+  border-radius: var(--cl-radius-md);
+  transition: color var(--cl-transition-fast), background var(--cl-transition-fast);
+}
+
+.cl-modal-close:hover {
+  color: var(--cl-color-text);
+  background: var(--cl-color-bg);
+}
+
+.cl-modal-close:focus-visible {
+  outline: var(--cl-focus-outline);
+  outline-offset: 2px;
+}
+
+/* ---- Body ---- */
+
+.cl-modal-body {
+  padding: var(--cl-spacing-xl);
+  font-size: var(--cl-font-size-base);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cl-spacing-md);
+}
+
+/* ---- Footer ---- */
+
+.cl-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--cl-spacing-sm);
+  padding: var(--cl-spacing-md) var(--cl-spacing-xl);
+  border-top: 1px solid var(--cl-color-border);
+}

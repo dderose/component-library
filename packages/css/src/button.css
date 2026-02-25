@@ -1,0 +1,105 @@
+/**
+ * Button
+ *
+ * Structure:
+ *   .cl-button
+ *     .cl-button-spinner (optional, inside button when loading)
+ *     (button text)
+ *
+ * Variant modifiers:
+ *   .cl-button--primary
+ *   .cl-button--secondary
+ *
+ * State modifiers:
+ *   .cl-button--loading
+ *   .cl-button--pressed
+ *   .cl-button--disabled  (or native :disabled)
+ *   .cl-button--focused
+ */
+
+.cl-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: var(--cl-spacing-sm) var(--cl-spacing-xl);
+  border-radius: var(--cl-radius-md);
+  font-family: var(--cl-font-family);
+  font-size: var(--cl-font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  transition:
+    background var(--cl-transition-base),
+    transform var(--cl-transition-fast),
+    box-shadow var(--cl-transition-base);
+}
+
+.cl-button:focus-visible {
+  outline: var(--cl-focus-outline);
+  outline-offset: 2px;
+}
+
+/* ---- Primary variant ---- */
+
+.cl-button--primary {
+  background: var(--cl-color-primary);
+  color: var(--cl-color-primary-text);
+  border-color: var(--cl-color-primary);
+}
+
+.cl-button--primary:hover:not(:disabled):not(.cl-button--loading) {
+  background: var(--cl-color-primary-hover);
+}
+
+/* ---- Secondary variant ---- */
+
+.cl-button--secondary {
+  background: var(--cl-color-surface);
+  color: var(--cl-color-text);
+  border-color: var(--cl-color-border);
+}
+
+.cl-button--secondary:hover:not(:disabled):not(.cl-button--loading) {
+  background: var(--cl-color-bg);
+}
+
+/* ---- Disabled ---- */
+
+.cl-button:disabled,
+.cl-button--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---- Loading ---- */
+
+.cl-button--loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+/* ---- Pressed ---- */
+
+.cl-button--pressed {
+  transform: scale(0.97);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ---- Spinner ---- */
+
+.cl-button-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: cl-spin 600ms linear infinite;
+}
+
+@keyframes cl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

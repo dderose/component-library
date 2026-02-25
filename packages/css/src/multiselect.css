@@ -1,0 +1,186 @@
+/**
+ * MultiSelect
+ *
+ * Structure:
+ *   .cl-multiselect
+ *     .cl-multiselect-label
+ *     .cl-multiselect-wrapper
+ *       .cl-multiselect-trigger
+ *         .cl-multiselect-tags
+ *           .cl-multiselect-tag
+ *             .cl-multiselect-tag-remove
+ *         .cl-multiselect-placeholder
+ *         .cl-multiselect-chevron
+ *       .cl-multiselect-dropdown
+ *         .cl-multiselect-option
+ *           .cl-multiselect-option-check
+ *     .cl-multiselect-errors
+ *       .cl-multiselect-error
+ *
+ * State modifiers (on .cl-multiselect):
+ *   .cl-multiselect--open
+ *   .cl-multiselect--focused
+ *   .cl-multiselect--touched
+ *   .cl-multiselect--dirty
+ *   .cl-multiselect--invalid
+ *
+ * Option modifiers:
+ *   .cl-multiselect-option--highlighted
+ *   .cl-multiselect-option--selected
+ *   .cl-multiselect-option--disabled
+ */
+
+.cl-multiselect {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cl-spacing-sm);
+}
+
+/* ---- Label ---- */
+
+.cl-multiselect-label {
+  font-weight: 600;
+  font-size: var(--cl-font-size-base);
+}
+
+/* ---- Wrapper ---- */
+
+.cl-multiselect-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* ---- Trigger ---- */
+
+.cl-multiselect-trigger {
+  width: 100%;
+  padding: var(--cl-spacing-sm) var(--cl-spacing-md);
+  border: 1px solid var(--cl-color-border);
+  border-radius: var(--cl-radius-md);
+  background: var(--cl-color-surface);
+  font-family: var(--cl-font-family);
+  font-size: var(--cl-font-size-base);
+  color: var(--cl-color-text);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--cl-spacing-sm);
+  min-height: 2.25rem;
+  outline: none;
+  transition: border-color var(--cl-transition-base);
+}
+
+.cl-multiselect-trigger:focus-visible {
+  outline: var(--cl-focus-outline);
+  outline-offset: 2px;
+}
+
+.cl-multiselect--invalid.cl-multiselect--touched .cl-multiselect-trigger {
+  border-color: var(--cl-color-error);
+}
+
+.cl-multiselect-placeholder {
+  color: var(--cl-color-text-muted);
+}
+
+.cl-multiselect-chevron {
+  font-size: 0.65rem;
+  color: var(--cl-color-text-muted);
+  flex-shrink: 0;
+}
+
+/* ---- Tags ---- */
+
+.cl-multiselect-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cl-spacing-xs);
+}
+
+.cl-multiselect-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.1rem 0.4rem;
+  background: var(--cl-color-bg);
+  border-radius: var(--cl-radius-sm);
+  font-size: var(--cl-font-size-sm);
+}
+
+.cl-multiselect-tag-remove {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0;
+  color: var(--cl-color-text-muted);
+  transition: color var(--cl-transition-fast);
+}
+
+.cl-multiselect-tag-remove:hover {
+  color: var(--cl-color-error);
+}
+
+/* ---- Dropdown ---- */
+
+.cl-multiselect-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  list-style: none;
+  padding: var(--cl-spacing-xs) 0;
+  margin: 0;
+  background: var(--cl-color-surface);
+  border: 1px solid var(--cl-color-border);
+  border-radius: var(--cl-radius-md);
+  box-shadow: var(--cl-shadow-md);
+  z-index: 10;
+}
+
+/* ---- Option ---- */
+
+.cl-multiselect-option {
+  padding: 0.4rem var(--cl-spacing-md);
+  font-size: var(--cl-font-size-base);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--cl-spacing-sm);
+  transition: background var(--cl-transition-fast);
+}
+
+.cl-multiselect-option:hover,
+.cl-multiselect-option--highlighted {
+  background: var(--cl-color-bg);
+}
+
+.cl-multiselect-option--selected {
+  color: var(--cl-color-primary);
+}
+
+.cl-multiselect-option--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.cl-multiselect-option-check {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ---- Errors ---- */
+
+.cl-multiselect-errors {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cl-multiselect-error {
+  color: var(--cl-color-error);
+  font-size: var(--cl-font-size-sm);
+}
