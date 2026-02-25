@@ -1,150 +1,99 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { useLogic } from "@component-library/svelte";
-  import { ModalLogic } from "@component-library/core";
+  import { Modal } from "@component-library/svelte";
 
-  const logic = new ModalLogic({
-    closeOnOverlayClick: true,
-    closeOnEscape: true,
-    scrollLock: true,
-  });
-
-  const state = useLogic(logic);
-  const { aria } = logic;
-
-  // Reference to the dialog panel for focus trapping.
-  let dialogEl: HTMLDivElement | undefined;
-
-  // Portal target — we append the modal to document.body so it escapes
-  // any parent overflow:hidden or z-index stacking contexts.
-  let portalTarget: HTMLDivElement | undefined;
-
-  onMount(() => {
-    portalTarget = document.createElement("div");
-    portalTarget.setAttribute("data-modal-portal", "");
-    document.body.appendChild(portalTarget);
-
-    return () => {
-      portalTarget?.remove();
-    };
-  });
-
-  // When the dialog mounts, move focus into it.
-  function handleDialogMount(node: HTMLDivElement) {
-    dialogEl = node;
-    logic.focusDialog(node);
-  }
-
-  // When overlay transition ends on close, finalize the close.
-  function handleTransitionEnd(event: TransitionEvent) {
-    if (
-      event.propertyName === "opacity" &&
-      state.current.status === "closing"
-    ) {
-      logic.finishClose();
-    }
-  }
+  let modalRef: ReturnType<typeof Modal.prototype.getLogic> | undefined;
+  let modal: { getLogic: () => import("@component-library/core").ModalLogic };
 </script>
 
 <h2>Modal</h2>
 
 <div class="demo">
-  <button class="open-btn" onclick={() => logic.open()}>Open Modal</button>
+  <button class="open-btn" onclick={() => modal?.getLogic().open()}>
+    Open Modal
+  </button>
 
-  <div class="state-debug">
-    <strong>State:</strong>
-    <code>
-      status="{state.current.status}" | open={state.current.open} |
-      hasOpened={state.current.hasOpened}
-    </code>
-  </div>
+  <h3>Simple usage</h3>
+  <p class="description">
+    The <code>&lt;Modal&gt;</code> component handles portal rendering, focus
+    trapping, scroll lock, ARIA attributes, and CSS transitions automatically.
+    Just provide your content.
+  </p>
 
   <h3>Features</h3>
   <ul class="feature-list">
+    <li><strong>Zero boilerplate</strong> — portal, focus trap, ARIA, and transitions are built in</li>
     <li><strong>Focus trap</strong> — Tab / Shift+Tab cycles through modal controls only</li>
     <li><strong>Focus restore</strong> — focus returns to the trigger button on close</li>
     <li><strong>Scroll lock</strong> — page body is locked while the modal is open</li>
     <li><strong>Escape to close</strong> — press Escape to dismiss</li>
     <li><strong>Overlay click</strong> — click the backdrop to dismiss</li>
-    <li><strong>Portal</strong> — modal renders at document.body to escape stacking contexts</li>
-    <li><strong>ARIA</strong> — role="dialog", aria-modal, aria-labelledby, aria-describedby</li>
-    <li><strong>CSS transitions</strong> — fade in/out driven by status state machine</li>
+    <li><strong>ARIA overrides</strong> — customize role, labelledby, describedby, or use aria-label</li>
+    <li><strong>Configurable transitions</strong> — set duration or disable with <code>transitionDuration={'{0}'}</code></li>
   </ul>
 </div>
 
-{#if portalTarget && state.current.open}
-  {@const status = state.current.status}
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div
-    class="overlay"
-    class:overlay-entering={status === "opening"}
-    class:overlay-open={status === "open"}
-    class:overlay-leaving={status === "closing"}
-    role={aria.overlay.role}
-    onclick={() => logic.handleOverlayClick()}
-    onkeydown={(e) => logic.handleKeyDown(e, dialogEl)}
-    ontransitionend={handleTransitionEnd}
-  >
-    <div
-      class="modal"
-      class:modal-entering={status === "opening"}
-      class:modal-open={status === "open"}
-      class:modal-leaving={status === "closing"}
-      role={aria.dialog.role}
-      aria-modal={aria.dialog["aria-modal"]}
-      aria-labelledby={aria.dialog["aria-labelledby"]}
-      aria-describedby={aria.dialog["aria-describedby"]}
-      tabindex={-1}
-      use:handleDialogMount
-      onclick={(e) => e.stopPropagation()}
-    >
-      <div class="modal-header">
-        <h3 id={aria.titleId}>Example Modal</h3>
-        <button
-          class="close-btn"
-          onclick={() => logic.close()}
-          aria-label="Close modal"
-        >
-          ×
-        </button>
-      </div>
-      <div class="modal-body" id={aria.descriptionId}>
-        <p>
-          This is a production-ready modal with focus trapping, scroll lock,
-          portal rendering, ARIA attributes, and CSS transitions — all
-          driven by <code>ModalLogic</code> from the core package.
-        </p>
-        <p>
-          Try pressing <kbd>Tab</kbd> to see focus stay trapped inside.
-          Press <kbd>Escape</kbd> or click the backdrop to dismiss.
-        </p>
-        <label class="demo-input-label" for="demo-modal-input">
-          Test input (for focus trap)
-        </label>
-        <input
-          id="demo-modal-input"
-          type="text"
-          class="demo-input"
-          placeholder="Type here…"
-        />
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick={() => logic.close()}>
-          Cancel
-        </button>
-        <button class="btn-primary" onclick={() => logic.close()}>
-          Confirm
-        </button>
-      </div>
+<!-- Simple modal — all wiring is handled by the component -->
+<Modal
+  bind:this={modal}
+  options={{ closeOnOverlayClick: true, closeOnEscape: true }}
+  panelClass="demo-modal-panel"
+>
+  {#snippet children({ aria, close })}
+    <div class="modal-header">
+      <h3 id={aria.titleId}>Example Modal</h3>
+      <button class="close-btn" onclick={close} aria-label="Close modal">×</button>
     </div>
-  </div>
-{/if}
+
+    <div class="modal-body" id={aria.descriptionId}>
+      <p>
+        This modal is rendered through a portal, has focus trapping, scroll
+        lock, and full ARIA support — all without any manual wiring.
+      </p>
+      <p>
+        Try pressing <kbd>Tab</kbd> to see focus trapped inside.
+        Press <kbd>Escape</kbd> or click the backdrop to dismiss.
+      </p>
+      <label class="demo-input-label" for="demo-input">
+        Test input (for focus trap)
+      </label>
+      <input id="demo-input" type="text" class="demo-input" placeholder="Type here…" />
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick={close}>Cancel</button>
+      <button class="btn-primary" onclick={close}>Confirm</button>
+    </div>
+  {/snippet}
+</Modal>
+
+<hr class="divider" />
+
+<h3>With ARIA overrides</h3>
+<p class="description">
+  Use <code>ariaOverrides</code> to provide <code>aria-label</code> instead of
+  <code>aria-labelledby</code>, change the role, or remove aria-describedby.
+</p>
+
+<pre class="code-example">{`<Modal
+  ariaOverrides={{
+    label: "Confirm deletion",
+    describedby: false,
+    role: "alertdialog",
+  }}
+>
+  …
+</Modal>`}</pre>
 
 <style>
   .demo {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+  }
+
+  .description {
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 
   .feature-list {
@@ -171,56 +120,32 @@
     background: var(--color-primary-hover);
   }
 
-  /* ---- Overlay ---- */
-
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    transition: background 200ms ease;
-  }
-  .overlay-entering {
-    background: rgba(0, 0, 0, 0);
-  }
-  .overlay-open {
-    background: rgba(0, 0, 0, 0.4);
-  }
-  .overlay-leaving {
-    background: rgba(0, 0, 0, 0);
+  .divider {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 1rem 0;
   }
 
-  /* ---- Modal panel ---- */
+  .code-example {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
 
-  .modal {
-    background: var(--color-surface);
+  /* ---- Modal content styles ---- */
+
+  :global(.demo-modal-panel) {
+    background: white;
     border-radius: 8px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     width: 90%;
     max-width: 440px;
     overflow: hidden;
-    outline: none;
-    transform: scale(0.95);
-    opacity: 0;
-    transition: transform 200ms ease, opacity 200ms ease;
   }
-  .modal-entering {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  .modal-open {
-    transform: scale(1);
-    opacity: 1;
-  }
-  .modal-leaving {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-
-  /* ---- Header ---- */
 
   .modal-header {
     display: flex;
@@ -252,8 +177,6 @@
     outline: 2px solid var(--color-border-focus);
     outline-offset: 2px;
   }
-
-  /* ---- Body ---- */
 
   .modal-body {
     padding: 1.25rem;
@@ -289,8 +212,6 @@
     border-radius: 3px;
     font-family: inherit;
   }
-
-  /* ---- Footer ---- */
 
   .modal-footer {
     display: flex;
@@ -329,19 +250,5 @@
   .btn-primary:focus-visible {
     outline: 2px solid var(--color-border-focus);
     outline-offset: 2px;
-  }
-
-  /* ---- State debug ---- */
-
-  .state-debug {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    background: var(--color-bg);
-    padding: 0.5rem;
-    border-radius: var(--radius);
-  }
-  .state-debug code {
-    display: block;
-    margin-top: 0.25rem;
   }
 </style>
