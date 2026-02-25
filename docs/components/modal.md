@@ -111,6 +111,30 @@ modal.destroy();
 {/if}
 ```
 
+### Svelte 5 — `<Modal>` wrapper component
+
+The `@component-library/svelte` package includes a `<Modal>` wrapper that handles portal rendering, focus trapping, ARIA, and CSS transitions automatically:
+
+```svelte
+<script lang="ts">
+  import { Modal } from "@component-library/svelte";
+</script>
+
+<Modal
+  options={{ closeOnEscape: true, closeOnOverlayClick: true, scrollLock: true }}
+  transitionDuration={200}
+  panelClass="my-modal"
+>
+  {#snippet children({ aria, close })}
+    <h2 id={aria.titleId}>Title</h2>
+    <p id={aria.descriptionId}>Description text.</p>
+    <button onclick={close}>Close</button>
+  {/snippet}
+</Modal>
+```
+
+The wrapper accepts `ariaOverrides` for custom roles (`alertdialog`), `aria-label` instead of `aria-labelledby`, or removing `aria-describedby`. Set `transitionDuration={0}` to disable transitions.
+
 ### React Native
 
 ```tsx
