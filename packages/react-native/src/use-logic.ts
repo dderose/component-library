@@ -1,5 +1,5 @@
-import { useEffect, useRef, useSyncExternalStore } from "react";
 import type { ComponentLogic } from "@component-library/core";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 /**
  * Bridges any core ComponentLogic instance into React's reactivity system.
@@ -13,7 +13,7 @@ import type { ComponentLogic } from "@component-library/core";
  * The factory function ensures a single instance per component lifecycle.
  */
 export function useLogic<TState>(
-  factory: () => ComponentLogic<TState>
+  factory: () => ComponentLogic<TState>,
 ): [TState, ComponentLogic<TState>] {
   const logicRef = useRef<ComponentLogic<TState> | null>(null);
 
@@ -31,8 +31,8 @@ export function useLogic<TState>(
   }, [logic]);
 
   const state = useSyncExternalStore(
-    (callback) => logic.subscribe(callback),
-    () => logic.getState()
+    (callback: () => void) => logic.subscribe(callback),
+    () => logic.getState(),
   );
 
   return [state, logic];

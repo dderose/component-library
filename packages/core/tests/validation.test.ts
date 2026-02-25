@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { runValidation, type ValidationRule } from "../src/utils/validation";
 
 const required = (): ValidationRule<string> => ({

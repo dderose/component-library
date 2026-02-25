@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "lib": ["ES2022"],
+    "jsx": "react-jsx",
+    "paths": {
+      "@component-library/core": ["../core/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

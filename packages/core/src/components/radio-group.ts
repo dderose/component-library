@@ -1,10 +1,6 @@
 import type { ComponentLogic } from "../types";
 import { Store } from "../utils/store";
-import {
-  runValidation,
-  type ValidationResult,
-  type ValidationRule,
-} from "../utils/validation";
+import { runValidation, type ValidationResult, type ValidationRule } from "../utils/validation";
 
 // ---- State & Options ----
 
@@ -32,11 +28,7 @@ export class RadioGroupLogic<T extends string = string>
   private validateOnChange: boolean;
 
   constructor(options: RadioGroupOptions<T> = {}) {
-    const {
-      initialValue = null,
-      rules = [],
-      validateOnChange = true,
-    } = options;
+    const { initialValue = null, rules = [], validateOnChange = true } = options;
 
     this.rules = rules;
     this.validateOnChange = validateOnChange;

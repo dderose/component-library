@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ButtonLogic } from "../src/components/button";
 
 describe("ButtonLogic", () => {
@@ -46,7 +46,9 @@ describe("ButtonLogic", () => {
 
   it("async onClick sets loading state", async () => {
     let resolve!: () => void;
-    const promise = new Promise<void>((r) => { resolve = r; });
+    const promise = new Promise<void>((r) => {
+      resolve = r;
+    });
     const btn = new ButtonLogic({ onClick: () => promise });
 
     const states: boolean[] = [];
@@ -63,7 +65,9 @@ describe("ButtonLogic", () => {
 
   it("loading sets isDisabled when disableWhileLoading is true (default)", async () => {
     let resolve!: () => void;
-    const promise = new Promise<void>((r) => { resolve = r; });
+    const promise = new Promise<void>((r) => {
+      resolve = r;
+    });
     const btn = new ButtonLogic({ onClick: () => promise });
 
     btn.press();
@@ -78,7 +82,9 @@ describe("ButtonLogic", () => {
 
   it("loading does NOT set isDisabled when disableWhileLoading is false", async () => {
     let resolve!: () => void;
-    const promise = new Promise<void>((r) => { resolve = r; });
+    const promise = new Promise<void>((r) => {
+      resolve = r;
+    });
     const btn = new ButtonLogic({
       onClick: () => promise,
       disableWhileLoading: false,
@@ -95,9 +101,14 @@ describe("ButtonLogic", () => {
   it("ignores press while loading", async () => {
     let callCount = 0;
     let resolve!: () => void;
-    const promise = new Promise<void>((r) => { resolve = r; });
+    const promise = new Promise<void>((r) => {
+      resolve = r;
+    });
     const btn = new ButtonLogic({
-      onClick: () => { callCount++; return promise; },
+      onClick: () => {
+        callCount++;
+        return promise;
+      },
     });
 
     btn.press(); // First click — starts loading
@@ -109,12 +120,14 @@ describe("ButtonLogic", () => {
     await promise;
   });
 
-  it("loading resets even if onClick rejects", async () => {
+  it("loading resets and error propagates if onClick rejects", async () => {
     const btn = new ButtonLogic({
-      onClick: async () => { throw new Error("fail"); },
+      onClick: async () => {
+        throw new Error("fail");
+      },
     });
 
-    await btn.press().catch(() => {});
+    await expect(btn.press()).rejects.toThrow("fail");
     expect(btn.getState().loading).toBe(false);
   });
 

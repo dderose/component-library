@@ -1,20 +1,18 @@
 <script lang="ts" module>
-  import type { ModalOptions, ModalAria } from "@component-library/core";
-
-  /**
-   * ARIA overrides that consumers can provide to customize
-   * the generated accessibility attributes.
-   */
-  export interface ModalAriaOverrides {
-    /** Override the dialog role. @default "dialog" */
-    role?: string;
-    /** Override or disable aria-labelledby. Set to `false` to remove. */
-    labelledby?: string | false;
-    /** Override or disable aria-describedby. Set to `false` to remove. */
-    describedby?: string | false;
-    /** Override aria-label (used instead of aria-labelledby when there's no visible title). */
-    label?: string;
-  }
+/**
+ * ARIA overrides that consumers can provide to customize
+ * the generated accessibility attributes.
+ */
+export interface ModalAriaOverrides {
+  /** Override the dialog role. @default "dialog" */
+  role?: string;
+  /** Override or disable aria-labelledby. Set to `false` to remove. */
+  labelledby?: string | false;
+  /** Override or disable aria-describedby. Set to `false` to remove. */
+  describedby?: string | false;
+  /** Override aria-label (used instead of aria-labelledby when there's no visible title). */
+  label?: string;
+}
 </script>
 
 <script lang="ts">

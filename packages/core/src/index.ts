@@ -1,32 +1,41 @@
 // ---- Types ----
-export type { ComponentLogic, Listener, Unsubscribe } from "./types";
 
-// ---- Utils ----
-export { Store, DerivedStore, defaultEquals, shallowEquals } from "./utils/store";
-export { runValidation } from "./utils/validation";
-export type { ValidationResult, ValidationRule } from "./utils/validation";
-
+export type {
+  AccordionAria,
+  AccordionItem,
+  AccordionOptions,
+  AccordionState,
+} from "./components/accordion";
+export { AccordionLogic } from "./components/accordion";
+export type { ButtonOptions, ButtonState } from "./components/button";
+export { ButtonLogic } from "./components/button";
+export type { CheckboxOptions, CheckboxState } from "./components/checkbox";
+export { CheckboxLogic } from "./components/checkbox";
+export type { ModalAria, ModalOptions, ModalState, ModalStatus } from "./components/modal";
+export {
+  getFocusableElements,
+  lockScroll,
+  ModalLogic,
+  trapFocus,
+  unlockScroll,
+} from "./components/modal";
+export type {
+  MultiSelectAria,
+  MultiSelectOption,
+  MultiSelectOptions,
+  MultiSelectState,
+} from "./components/multi-select";
+export { MultiSelectLogic } from "./components/multi-select";
+export type { RadioGroupOptions, RadioGroupState } from "./components/radio-group";
+export { RadioGroupLogic } from "./components/radio-group";
+export type { SelectAria, SelectOption, SelectOptions, SelectState } from "./components/select";
+export { SelectLogic } from "./components/select";
+export type { TextFieldOptions, TextFieldState } from "./components/text-field";
 // ---- Components ----
 export { TextFieldLogic } from "./components/text-field";
-export type { TextFieldState, TextFieldOptions } from "./components/text-field";
-
-export { CheckboxLogic } from "./components/checkbox";
-export type { CheckboxState, CheckboxOptions } from "./components/checkbox";
-
-export { RadioGroupLogic } from "./components/radio-group";
-export type { RadioGroupState, RadioGroupOptions } from "./components/radio-group";
-
-export { SelectLogic, resetSelectIdCounter } from "./components/select";
-export type { SelectState, SelectOption, SelectAria, SelectOptions } from "./components/select";
-
-export { MultiSelectLogic, resetMultiSelectIdCounter } from "./components/multi-select";
-export type { MultiSelectState, MultiSelectOption, MultiSelectAria, MultiSelectOptions } from "./components/multi-select";
-
-export { ModalLogic, getFocusableElements, trapFocus, lockScroll, unlockScroll, resetModalIdCounter } from "./components/modal";
-export type { ModalState, ModalStatus, ModalAria, ModalOptions } from "./components/modal";
-
-export { AccordionLogic, resetAccordionIdCounter } from "./components/accordion";
-export type { AccordionState, AccordionItem, AccordionAria, AccordionOptions } from "./components/accordion";
-
-export { ButtonLogic } from "./components/button";
-export type { ButtonState, ButtonOptions } from "./components/button";
+export type { ComponentLogic, Listener, Unsubscribe } from "./types";
+export { generateId } from "./utils/id";
+// ---- Utils ----
+export { DerivedStore, defaultEquals, Store, shallowEquals } from "./utils/store";
+export type { ValidationResult, ValidationRule } from "./utils/validation";
+export { runValidation } from "./utils/validation";

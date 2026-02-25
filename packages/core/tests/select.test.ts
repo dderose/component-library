@@ -1,9 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  SelectLogic,
-  resetSelectIdCounter,
-  type SelectOption,
-} from "../src/components/select";
+import { describe, expect, it, vi } from "vitest";
+import { SelectLogic, type SelectOption } from "../src/components/select";
 import type { ValidationRule } from "../src/utils/validation";
 
 type Fruit = "apple" | "banana" | "cherry" | "mango";
@@ -30,10 +26,6 @@ const required = (): ValidationRule<Fruit | null> => ({
 function key(key: string, extra: Partial<KeyboardEvent> = {}): KeyboardEvent {
   return { key, preventDefault: vi.fn(), ...extra } as unknown as KeyboardEvent;
 }
-
-beforeEach(() => {
-  resetSelectIdCounter();
-});
 
 describe("SelectLogic", () => {
   // ---- Initial state ----

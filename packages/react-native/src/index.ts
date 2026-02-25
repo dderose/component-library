@@ -1,67 +1,60 @@
 // ---- Adapter ----
-export { useLogic } from "./use-logic";
+
+export type {
+  AccordionAria,
+  AccordionItem,
+  AccordionOptions,
+  AccordionState,
+  ButtonOptions,
+  ButtonState,
+  CheckboxOptions,
+  CheckboxState,
+  ComponentLogic,
+  Listener,
+  ModalAria,
+  ModalOptions,
+  ModalState,
+  ModalStatus,
+  MultiSelectAria,
+  MultiSelectOption,
+  MultiSelectOptions,
+  MultiSelectState,
+  RadioGroupOptions,
+  RadioGroupState,
+  SelectAria,
+  SelectOption,
+  SelectOptions,
+  SelectState,
+  TextFieldOptions,
+  TextFieldState,
+  Unsubscribe,
+  ValidationResult,
+  ValidationRule,
+} from "@component-library/core";
 
 // ---- Re-export core for convenience ----
 // Consumers can import everything from @component-library/react-native
 export {
-  // Utils
-  Store,
-  DerivedStore,
-  defaultEquals,
-  shallowEquals,
-  runValidation,
-
-  // Components
-  TextFieldLogic,
-  CheckboxLogic,
-  RadioGroupLogic,
-  SelectLogic,
-  MultiSelectLogic,
-  ModalLogic,
   AccordionLogic,
   ButtonLogic,
-
+  CheckboxLogic,
+  DerivedStore,
+  defaultEquals,
+  generateId,
   // DOM helpers (for web — not used in RN, but available)
   getFocusableElements,
-  trapFocus,
   lockScroll,
+  ModalLogic,
+  MultiSelectLogic,
+  RadioGroupLogic,
+  runValidation,
+  SelectLogic,
+  // Utils
+  Store,
+  shallowEquals,
+  // Components
+  TextFieldLogic,
+  trapFocus,
   unlockScroll,
-
-  // Test helpers
-  resetSelectIdCounter,
-  resetMultiSelectIdCounter,
-  resetModalIdCounter,
-  resetAccordionIdCounter,
 } from "@component-library/core";
-
-export type {
-  ComponentLogic,
-  Listener,
-  Unsubscribe,
-  ValidationResult,
-  ValidationRule,
-  TextFieldState,
-  TextFieldOptions,
-  CheckboxState,
-  CheckboxOptions,
-  RadioGroupState,
-  RadioGroupOptions,
-  SelectState,
-  SelectOption,
-  SelectAria,
-  SelectOptions,
-  MultiSelectState,
-  MultiSelectOption,
-  MultiSelectAria,
-  MultiSelectOptions,
-  ModalState,
-  ModalStatus,
-  ModalAria,
-  ModalOptions,
-  AccordionState,
-  AccordionItem,
-  AccordionAria,
-  AccordionOptions,
-  ButtonState,
-  ButtonOptions,
-} from "@component-library/core";
+export { useLogic } from "./use-logic";

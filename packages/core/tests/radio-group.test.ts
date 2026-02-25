@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { RadioGroupLogic } from "../src/components/radio-group";
 import type { ValidationRule } from "../src/utils/validation";
 

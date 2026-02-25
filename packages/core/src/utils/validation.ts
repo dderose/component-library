@@ -8,10 +8,7 @@ export interface ValidationRule<T> {
   validate: (value: T) => string | null;
 }
 
-export function runValidation<T>(
-  value: T,
-  rules: ValidationRule<T>[]
-): ValidationResult {
+export function runValidation<T>(value: T, rules: ValidationRule<T>[]): ValidationResult {
   const errors: string[] = [];
 
   for (const rule of rules) {

@@ -1,5 +1,5 @@
-import { onDestroy } from "svelte";
 import type { ComponentLogic } from "@component-library/core";
+import { onDestroy } from "svelte";
 
 /**
  * Bridges any core ComponentLogic instance into Svelte's reactivity system.

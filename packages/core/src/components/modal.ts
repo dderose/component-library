@@ -1,20 +1,6 @@
 import type { ComponentLogic } from "../types";
+import { generateId } from "../utils/id";
 import { Store } from "../utils/store";
-
-// ---- ID generation ----
-
-let idCounter = 0;
-
-function generateId(prefix: string): string {
-  return `${prefix}-${++idCounter}`;
-}
-
-/** Reset the counter (useful for deterministic tests). */
-export function resetModalIdCounter(): void {
-  idCounter = 0;
-}
-
-// ---- State & Options ----
 
 export type ModalStatus = "closed" | "opening" | "open" | "closing";
 
@@ -74,11 +60,11 @@ export interface ModalOptions {
 // ---- Focus trap helpers (framework-agnostic) ----
 
 const FOCUSABLE_SELECTOR = [
-  'a[href]',
-  'button:not([disabled])',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
   '[tabindex]:not([tabindex="-1"])',
 ].join(", ");
 
@@ -88,7 +74,7 @@ const FOCUSABLE_SELECTOR = [
  */
 export function getFocusableElements(container: Element): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-    (el) => !el.hasAttribute("disabled") && el.offsetParent !== null
+    (el) => !el.hasAttribute("disabled") && el.offsetParent !== null,
   );
 }
 
@@ -103,8 +89,8 @@ export function trapFocus(event: KeyboardEvent, container: Element): boolean {
   const focusable = getFocusableElements(container);
   if (focusable.length === 0) return false;
 
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
+  const first = focusable[0]!;
+  const last = focusable[focusable.length - 1]!;
 
   if (event.shiftKey) {
     if (document.activeElement === first || !container.contains(document.activeElement)) {
@@ -392,7 +378,7 @@ export class ModalLogic implements ComponentLogic<ModalState> {
   focusDialog(dialogElement: HTMLElement): void {
     const focusable = getFocusableElements(dialogElement);
     if (focusable.length > 0) {
-      focusable[0].focus();
+      focusable[0]!.focus();
     } else {
       dialogElement.focus();
     }

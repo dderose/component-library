@@ -3,10 +3,19 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@component-library/core": "workspace:*"
@@ -18,6 +27,7 @@
   "devDependencies": {
     "react": "^18.2.0",
     "react-native": "^0.76.0",
+    "tsup": "^8.0.0",
     "typescript": "^5.5.0"
   }
 }

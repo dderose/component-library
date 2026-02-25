@@ -4,8 +4,12 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "build": "bun run --filter '*' build",
-    "test": "bun run --filter '*' test",
-    "test:core": "bun test --filter '*' --cwd packages/core",
-    "typecheck": "bun run --filter '*' typecheck"
+    "test": "vitest run packages/core/tests",
+    "test:watch": "vitest --watch packages/core/tests",
+    "typecheck": "tsc --noEmit -p packages/core/tsconfig.json",
+    "lint": "biome check packages/core/src packages/core/tests packages/react-native/src packages/svelte/src",
+    "lint:fix": "biome check --write packages/core/src packages/core/tests packages/react-native/src packages/svelte/src",
+    "format": "biome format --write packages/core/src packages/core/tests packages/react-native/src packages/svelte/src",
+    "check": "npm run typecheck && npm run lint && npm run test"
   }
 }

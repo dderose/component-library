@@ -76,10 +76,7 @@ export class Store<T> {
   }
 
   setState(updater: T | ((prev: T) => T)): void {
-    const next =
-      typeof updater === "function"
-        ? (updater as (prev: T) => T)(this.state)
-        : updater;
+    const next = typeof updater === "function" ? (updater as (prev: T) => T)(this.state) : updater;
 
     // Shallow equality check — skip if same reference
     if (next === this.state) return;
@@ -193,10 +190,7 @@ export class DerivedStore<T> {
   private unsubscribers: Unsubscribe[] = [];
   private equals: (a: T, b: T) => boolean;
 
-  private constructor(
-    initialState: T,
-    equals: (a: T, b: T) => boolean,
-  ) {
+  private constructor(initialState: T, equals: (a: T, b: T) => boolean) {
     this.state = initialState;
     this.equals = equals;
   }
@@ -242,8 +236,7 @@ export class DerivedStore<T> {
     equals?: (a: TDerived, b: TDerived) => boolean,
   ): DerivedStore<TDerived> {
     const eq = equals ?? defaultEquals;
-    const getParentStates = () =>
-      parents.map((p) => p.getState()) as TParents;
+    const getParentStates = () => parents.map((p) => p.getState()) as TParents;
 
     const initial = derive(getParentStates());
     const derived = new DerivedStore(initial, eq);

@@ -1,19 +1,6 @@
 import type { ComponentLogic } from "../types";
+import { generateId } from "../utils/id";
 import { Store } from "../utils/store";
-
-// ---- ID generation ----
-
-let idCounter = 0;
-
-function generateId(prefix: string): string {
-  return `${prefix}-${++idCounter}`;
-}
-
-export function resetAccordionIdCounter(): void {
-  idCounter = 0;
-}
-
-// ---- State & Options ----
 
 export interface AccordionItem {
   id: string;
@@ -104,9 +91,7 @@ export class AccordionLogic implements ComponentLogic<AccordionState> {
     };
 
     this.store = new Store<AccordionState>({
-      expandedItems: new Set(
-        multiple ? initialExpanded : initialExpanded.slice(0, 1)
-      ),
+      expandedItems: new Set(multiple ? initialExpanded : initialExpanded.slice(0, 1)),
       focusedItemId: null,
     });
   }
@@ -238,26 +223,26 @@ export class AccordionLogic implements ComponentLogic<AccordionState> {
       case "ArrowDown": {
         event.preventDefault();
         const nextIndex = (currentIndex + 1) % enabled.length;
-        this.focusItem(enabled[nextIndex].id);
+        this.focusItem(enabled[nextIndex]!.id);
         break;
       }
 
       case "ArrowUp": {
         event.preventDefault();
         const prevIndex = (currentIndex - 1 + enabled.length) % enabled.length;
-        this.focusItem(enabled[prevIndex].id);
+        this.focusItem(enabled[prevIndex]!.id);
         break;
       }
 
       case "Home": {
         event.preventDefault();
-        this.focusItem(enabled[0].id);
+        this.focusItem(enabled[0]!.id);
         break;
       }
 
       case "End": {
         event.preventDefault();
-        this.focusItem(enabled[enabled.length - 1].id);
+        this.focusItem(enabled[enabled.length - 1]!.id);
         break;
       }
 

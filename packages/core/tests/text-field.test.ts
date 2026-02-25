@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
-import { TextFieldLogic, type TextFieldState } from "../src/components/text-field";
+import { describe, expect, it, vi } from "vitest";
+import { TextFieldLogic } from "../src/components/text-field";
 import type { ValidationRule } from "../src/utils/validation";
 
 const required = (): ValidationRule<string> => ({

@@ -8,6 +8,10 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "svelte": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@component-library/core": "workspace:*"
   },

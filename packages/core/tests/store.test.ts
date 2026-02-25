@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
-import { Store, DerivedStore, shallowEquals, defaultEquals } from "../src/utils/store";
+import { describe, expect, it, vi } from "vitest";
+import { DerivedStore, defaultEquals, Store, shallowEquals } from "../src/utils/store";
 
 // ---- Store ----
 

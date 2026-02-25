@@ -1,17 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  ModalLogic,
-  resetModalIdCounter,
-  type ModalStatus,
-} from "../src/components/modal";
+import { describe, expect, it, vi } from "vitest";
+import { ModalLogic, type ModalStatus } from "../src/components/modal";
 
 function key(k: string): KeyboardEvent {
   return { key: k, preventDefault: vi.fn() } as unknown as KeyboardEvent;
 }
-
-beforeEach(() => {
-  resetModalIdCounter();
-});
 
 describe("ModalLogic", () => {
   // ---- Initial state ----

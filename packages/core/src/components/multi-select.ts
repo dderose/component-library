@@ -1,24 +1,7 @@
 import type { ComponentLogic } from "../types";
+import { generateId } from "../utils/id";
 import { Store } from "../utils/store";
-import {
-  runValidation,
-  type ValidationResult,
-  type ValidationRule,
-} from "../utils/validation";
-
-// ---- ID generation ----
-
-let idCounter = 0;
-
-function generateId(prefix: string): string {
-  return `${prefix}-${++idCounter}`;
-}
-
-export function resetMultiSelectIdCounter(): void {
-  idCounter = 0;
-}
-
-// ---- State & Options ----
+import { runValidation, type ValidationResult, type ValidationRule } from "../utils/validation";
 
 export interface MultiSelectOption<T extends string = string> {
   value: T;
@@ -153,9 +136,7 @@ export class MultiSelectLogic<T extends string = string>
       ...this.aria.trigger,
       "aria-expanded": open,
       "aria-activedescendant":
-        open && highlightedIndex >= 0
-          ? this.aria.optionId(highlightedIndex)
-          : "",
+        open && highlightedIndex >= 0 ? this.aria.optionId(highlightedIndex) : "",
     };
   }
 
@@ -262,7 +243,7 @@ export class MultiSelectLogic<T extends string = string>
     let index = from;
     for (let i = 0; i < len; i++) {
       index = (index + direction + len) % len;
-      if (!this.selectOptions[index].disabled) return index;
+      if (!this.selectOptions[index]?.disabled) return index;
     }
     return -1;
   }
@@ -343,7 +324,7 @@ export class MultiSelectLogic<T extends string = string>
 
       case "Backspace": {
         if (!open && value.length > 0) {
-          this.deselect(value[value.length - 1]);
+          this.deselect(value[value.length - 1]!);
         }
         break;
       }

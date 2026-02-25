@@ -1,29 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  AccordionLogic,
-  resetAccordionIdCounter,
-  type AccordionItem,
-} from "../src/components/accordion";
+import { describe, expect, it, vi } from "vitest";
+import { type AccordionItem, AccordionLogic } from "../src/components/accordion";
 
-const items: AccordionItem[] = [
-  { id: "a" },
-  { id: "b" },
-  { id: "c" },
-];
+const items: AccordionItem[] = [{ id: "a" }, { id: "b" }, { id: "c" }];
 
-const itemsWithDisabled: AccordionItem[] = [
-  { id: "a" },
-  { id: "b", disabled: true },
-  { id: "c" },
-];
+const itemsWithDisabled: AccordionItem[] = [{ id: "a" }, { id: "b", disabled: true }, { id: "c" }];
 
 function key(k: string): KeyboardEvent {
   return { key: k, preventDefault: vi.fn() } as unknown as KeyboardEvent;
 }
-
-beforeEach(() => {
-  resetAccordionIdCounter();
-});
 
 describe("AccordionLogic", () => {
   // ---- Initial state ----
@@ -330,13 +314,11 @@ describe("AccordionLogic", () => {
 
     it("prevents default on handled keys", () => {
       const acc = new AccordionLogic({ items });
-      const events = ["ArrowDown", "ArrowUp", "Home", "End", "Enter", " "].map(
-        (k) => {
-          const e = key(k);
-          acc.handleKeyDown(e, "a");
-          return e;
-        }
-      );
+      const events = ["ArrowDown", "ArrowUp", "Home", "End", "Enter", " "].map((k) => {
+        const e = key(k);
+        acc.handleKeyDown(e, "a");
+        return e;
+      });
       for (const e of events) {
         expect(e.preventDefault).toHaveBeenCalled();
       }

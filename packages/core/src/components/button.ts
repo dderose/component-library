@@ -37,11 +37,7 @@ export class ButtonLogic implements ComponentLogic<ButtonState> {
   private disableWhileLoading: boolean;
 
   constructor(options: ButtonOptions = {}) {
-    const {
-      disabled = false,
-      onClick,
-      disableWhileLoading = true,
-    } = options;
+    const { disabled = false, onClick, disableWhileLoading = true } = options;
 
     this.onClick = onClick;
     this.disableWhileLoading = disableWhileLoading;
@@ -76,6 +72,9 @@ export class ButtonLogic implements ComponentLogic<ButtonState> {
    * Trigger the button's click handler.
    * If the handler returns a Promise, the button enters loading state
    * until it settles. Clicks are ignored while loading or disabled.
+   *
+   * Errors from async handlers are propagated to the caller after
+   * the loading state is reset. Callers can catch them to show toasts, etc.
    */
   async press(): Promise<void> {
     if (this.isDisabled()) return;
@@ -88,9 +87,11 @@ export class ButtonLogic implements ComponentLogic<ButtonState> {
       this.store.setState((prev) => ({ ...prev, loading: true }));
       try {
         await result;
-      } finally {
+      } catch (error) {
         this.store.setState((prev) => ({ ...prev, loading: false }));
+        throw error;
       }
+      this.store.setState((prev) => ({ ...prev, loading: false }));
     }
   }
 

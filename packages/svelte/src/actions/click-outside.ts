@@ -6,9 +6,7 @@
  *   <div use:clickOutside={() => logic.closeMenu()}>…</div>
  *   <div use:clickOutside={{ handler: () => close(), enabled: isOpen }}>…</div>
  */
-export type ClickOutsideParams =
-  | (() => void)
-  | { handler: () => void; enabled?: boolean };
+export type ClickOutsideParams = (() => void) | { handler: () => void; enabled?: boolean };
 
 export function clickOutside(node: HTMLElement, params: ClickOutsideParams) {
   let handler: () => void;

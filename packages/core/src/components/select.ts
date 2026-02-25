@@ -1,24 +1,7 @@
 import type { ComponentLogic } from "../types";
+import { generateId } from "../utils/id";
 import { Store } from "../utils/store";
-import {
-  runValidation,
-  type ValidationResult,
-  type ValidationRule,
-} from "../utils/validation";
-
-// ---- ID generation ----
-
-let idCounter = 0;
-
-function generateId(prefix: string): string {
-  return `${prefix}-${++idCounter}`;
-}
-
-export function resetSelectIdCounter(): void {
-  idCounter = 0;
-}
-
-// ---- State & Options ----
+import { runValidation, type ValidationResult, type ValidationRule } from "../utils/validation";
 
 export interface SelectOption<T extends string = string> {
   value: T;
@@ -69,9 +52,7 @@ export interface SelectOptions<T extends string = string> {
 
 // ---- Logic class ----
 
-export class SelectLogic<T extends string = string>
-  implements ComponentLogic<SelectState<T>>
-{
+export class SelectLogic<T extends string = string> implements ComponentLogic<SelectState<T>> {
   private store: Store<SelectState<T>>;
   private rules: ValidationRule<T | null>[];
   private validateOnChange: boolean;
@@ -149,9 +130,7 @@ export class SelectLogic<T extends string = string>
       ...this.aria.trigger,
       "aria-expanded": open,
       "aria-activedescendant":
-        open && highlightedIndex >= 0
-          ? this.aria.optionId(highlightedIndex)
-          : "",
+        open && highlightedIndex >= 0 ? this.aria.optionId(highlightedIndex) : "",
     };
   }
 
@@ -181,7 +160,7 @@ export class SelectLogic<T extends string = string>
   openMenu(): void {
     // Highlight the currently selected option, or the first option.
     const selectedIndex = this.selectOptions.findIndex(
-      (o) => o.value === this.store.getState().value && !o.disabled
+      (o) => o.value === this.store.getState().value && !o.disabled,
     );
     const firstEnabled = this.selectOptions.findIndex((o) => !o.disabled);
 
@@ -241,7 +220,7 @@ export class SelectLogic<T extends string = string>
     let index = from;
     for (let i = 0; i < len; i++) {
       index = (index + direction + len) % len;
-      if (!this.selectOptions[index].disabled) return index;
+      if (!this.selectOptions[index]?.disabled) return index;
     }
     return -1;
   }

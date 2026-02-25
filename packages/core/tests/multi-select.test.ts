@@ -1,9 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  MultiSelectLogic,
-  resetMultiSelectIdCounter,
-  type MultiSelectOption,
-} from "../src/components/multi-select";
+import { describe, expect, it, vi } from "vitest";
+import { MultiSelectLogic, type MultiSelectOption } from "../src/components/multi-select";
 import type { ValidationRule } from "../src/utils/validation";
 
 type Tag = "svelte" | "react" | "vue" | "angular" | "solid";
@@ -32,10 +28,6 @@ const minSelected = (min: number): ValidationRule<Tag[]> => ({
 function key(k: string, extra: Partial<KeyboardEvent> = {}): KeyboardEvent {
   return { key: k, preventDefault: vi.fn(), ...extra } as unknown as KeyboardEvent;
 }
-
-beforeEach(() => {
-  resetMultiSelectIdCounter();
-});
 
 describe("MultiSelectLogic", () => {
   // ---- Initial state ----
