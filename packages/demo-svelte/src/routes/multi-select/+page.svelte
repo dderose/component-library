@@ -23,14 +23,24 @@
   });
 
   const state = useLogic(logic);
+
+  let wrapperEl: HTMLDivElement;
+
+  function handleWindowClick(e: MouseEvent) {
+    if (state.current.open && wrapperEl && !wrapperEl.contains(e.target as Node)) {
+      logic.closeMenu();
+    }
+  }
 </script>
+
+<svelte:window onclick={handleWindowClick} />
 
 <h2>MultiSelect</h2>
 
 <div class="demo">
   <label class="label">Frameworks you've used</label>
 
-  <div class="select-wrapper">
+  <div class="select-wrapper" bind:this={wrapperEl}>
     <button class="select-trigger" onclick={() => logic.toggleMenu()}>
       {#if state.current.value.length > 0}
         <span class="tags">
