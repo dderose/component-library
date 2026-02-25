@@ -2,7 +2,7 @@
 export type { ComponentLogic, Listener, Unsubscribe } from "./types";
 
 // ---- Utils ----
-export { Store } from "./utils/store";
+export { Store, DerivedStore, defaultEquals, shallowEquals } from "./utils/store";
 export { runValidation } from "./utils/validation";
 export type { ValidationResult, ValidationRule } from "./utils/validation";
 
