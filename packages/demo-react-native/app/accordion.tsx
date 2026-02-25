@@ -5,7 +5,6 @@ import type { AccordionItem } from "@component-library/core";
 import { StateDebug } from "../components/StateDebug";
 import { Colors, Spacing, Radius } from "../constants/theme";
 
-// Enable LayoutAnimation on Android
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
@@ -37,8 +36,78 @@ const items: (AccordionItem & { title: string; content: string })[] = [
   },
 ];
 
+function AccordionInstance({
+  logic,
+  state,
+}: {
+  logic: AccordionLogic;
+  state: ReturnType<AccordionLogic["getState"]>;
+}) {
+  const handleToggle = (id: string) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    logic.toggle(id);
+  };
+
+  return (
+    <View style={styles.accordion}>
+      {items.map((item, index) => {
+        const expanded = state.expandedItems.has(item.id);
+        const isDisabled = !!item.disabled;
+        const isFirst = index === 0;
+        const isLast = index === items.length - 1;
+
+        return (
+          <View
+            key={item.id}
+            style={[
+              styles.item,
+              !isFirst && styles.itemBorder,
+              isDisabled && styles.itemDisabled,
+            ]}
+          >
+            <Pressable
+              style={[
+                styles.trigger,
+                expanded && styles.triggerExpanded,
+                isFirst && styles.triggerFirst,
+                isLast && !expanded && styles.triggerLast,
+              ]}
+              onPress={() => handleToggle(item.id)}
+              disabled={isDisabled}
+              accessibilityRole="button"
+              accessibilityState={{ expanded, disabled: isDisabled }}
+            >
+              <Text style={styles.triggerText}>{item.title}</Text>
+              <Text style={styles.chevron}>{expanded ? "▲" : "▼"}</Text>
+            </Pressable>
+
+            {expanded && (
+              <View
+                style={[styles.panel, isLast && styles.panelLast]}
+                accessibilityRole="summary"
+              >
+                <Text style={styles.panelText}>{item.content}</Text>
+              </View>
+            )}
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 export default function AccordionScreen() {
-  const [state, logic] = useLogic(
+  const [singleState, singleLogic] = useLogic(
+    () =>
+      new AccordionLogic({
+        items,
+        initialExpanded: ["what"],
+        multiple: false,
+        collapsible: true,
+      })
+  );
+
+  const [multiState, multiLogic] = useLogic(
     () =>
       new AccordionLogic({
         items,
@@ -48,76 +117,59 @@ export default function AccordionScreen() {
       })
   );
 
-  const handleToggle = (id: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    logic.toggle(id);
-  };
-
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.accordion}>
-        {items.map((item, index) => {
-          const expanded = state.expandedItems.has(item.id);
-          const isDisabled = !!item.disabled;
-          const isFirst = index === 0;
-          const isLast = index === items.length - 1;
+      {/* Single mode */}
+      <Text style={styles.sectionTitle}>Single mode</Text>
+      <Text style={styles.sectionMeta}>multiple: false</Text>
+      <Text style={styles.sectionDescription}>
+        Only one item can be open at a time. Opening a new item collapses the previous one.
+      </Text>
 
-          return (
-            <View
-              key={item.id}
-              style={[
-                styles.item,
-                !isFirst && styles.itemBorder,
-                isDisabled && styles.itemDisabled,
-              ]}
-            >
-              <Pressable
-                style={[
-                  styles.trigger,
-                  expanded && styles.triggerExpanded,
-                  isFirst && styles.triggerFirst,
-                  isLast && !expanded && styles.triggerLast,
-                ]}
-                onPress={() => handleToggle(item.id)}
-                disabled={isDisabled}
-                accessibilityRole="button"
-                accessibilityState={{ expanded, disabled: isDisabled }}
-              >
-                <Text style={styles.triggerText}>{item.title}</Text>
-                <Text style={styles.chevron}>{expanded ? "▲" : "▼"}</Text>
-              </Pressable>
-
-              {expanded && (
-                <View
-                  style={[styles.panel, isLast && styles.panelLast]}
-                  accessibilityRole="summary"
-                >
-                  <Text style={styles.panelText}>{item.content}</Text>
-                </View>
-              )}
-            </View>
-          );
-        })}
-      </View>
+      <AccordionInstance logic={singleLogic} state={singleState} />
 
       <StateDebug
         state={{
-          expanded: state.expandedItems,
-          focused: state.focusedItemId ?? "none",
+          expanded: singleState.expandedItems,
+          focused: singleState.focusedItemId ?? "none",
+        }}
+      />
+
+      {/* Multiple mode */}
+      <View style={styles.divider} />
+
+      <Text style={styles.sectionTitle}>Multiple mode</Text>
+      <Text style={styles.sectionMeta}>multiple: true</Text>
+      <Text style={styles.sectionDescription}>
+        Multiple items can be open simultaneously. Expand All / Collapse All buttons work in this mode.
+      </Text>
+
+      <AccordionInstance logic={multiLogic} state={multiState} />
+
+      <StateDebug
+        state={{
+          expanded: multiState.expandedItems,
+          focused: multiState.focusedItemId ?? "none",
         }}
       />
 
       <View style={styles.actions}>
-        <Pressable style={styles.button} onPress={() => {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-          logic.expandAll();
-        }}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            multiLogic.expandAll();
+          }}
+        >
           <Text style={styles.buttonText}>Expand All</Text>
         </Pressable>
-        <Pressable style={styles.button} onPress={() => {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-          logic.collapseAll();
-        }}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            multiLogic.collapseAll();
+          }}
+        >
           <Text style={styles.buttonText}>Collapse All</Text>
         </Pressable>
       </View>
@@ -128,6 +180,24 @@ export default function AccordionScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.surface },
   content: { padding: Spacing.xl, gap: Spacing.md },
+  sectionTitle: { fontSize: 18, fontWeight: "700", color: Colors.text },
+  sectionMeta: {
+    fontSize: 12,
+    fontFamily: "monospace",
+    color: Colors.textMuted,
+    backgroundColor: Colors.background,
+    alignSelf: "flex-start",
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: 3,
+    marginTop: -Spacing.xs,
+  },
+  sectionDescription: { fontSize: 14, color: Colors.textMuted, lineHeight: 20 },
+  divider: {
+    height: 1,
+    backgroundColor: Colors.border,
+    marginVertical: Spacing.sm,
+  },
   accordion: {
     borderWidth: 1,
     borderColor: Colors.border,

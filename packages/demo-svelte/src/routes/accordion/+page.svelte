@@ -30,36 +30,54 @@
     },
   ];
 
-  const logic = new AccordionLogic({
+  // ---- Single mode ----
+  const singleLogic = new AccordionLogic({
+    initialExpanded: ["what"],
+    items,
+    multiple: false,
+    collapsible: true,
+  });
+  const singleState = useLogic(singleLogic);
+
+  $effect(() => {
+    const focusedId = singleState.current.focusedItemId;
+    if (focusedId) {
+      document.getElementById(singleLogic.getTriggerId(focusedId))?.focus();
+    }
+  });
+
+  // ---- Multiple mode ----
+  const multiLogic = new AccordionLogic({
     initialExpanded: ["what"],
     items,
     multiple: true,
     collapsible: true,
   });
+  const multiState = useLogic(multiLogic);
 
-  const state = useLogic(logic);
-
-  // Drive DOM focus when focusedItemId changes
   $effect(() => {
-    const focusedId = state.current.focusedItemId;
+    const focusedId = multiState.current.focusedItemId;
     if (focusedId) {
-      const triggerId = logic.getTriggerId(focusedId);
-      document.getElementById(triggerId)?.focus();
+      document.getElementById(multiLogic.getTriggerId(focusedId))?.focus();
     }
   });
 </script>
 
 <h2>Accordion</h2>
 
+<!-- Single mode -->
 <div class="demo">
+  <h3 class="demo-title">Single mode <code>multiple: false</code></h3>
+  <p class="demo-description">Only one item can be open at a time. Opening a new item collapses the previous one.</p>
+
   <div class="accordion" role="presentation">
     {#each items as item}
-      {@const expanded = state.current.expandedItems.has(item.id)}
-      {@const triggerAttrs = logic.aria.triggerAttrs(item.id)}
-      {@const panelAttrs = logic.aria.panelAttrs(item.id)}
+      {@const expanded = singleState.current.expandedItems.has(item.id)}
+      {@const triggerAttrs = singleLogic.aria.triggerAttrs(item.id)}
+      {@const panelAttrs = singleLogic.aria.panelAttrs(item.id)}
 
       <div class="accordion-item" class:disabled={item.disabled}>
-        <h3 class="accordion-header">
+        <h4 class="accordion-header">
           <button
             id={triggerAttrs.id}
             class="accordion-trigger"
@@ -68,9 +86,9 @@
             aria-controls={triggerAttrs["aria-controls"]}
             aria-disabled={item.disabled || undefined}
             disabled={item.disabled}
-            onclick={() => logic.toggle(item.id)}
-            onkeydown={(e) => logic.handleKeyDown(e, item.id)}
-            onfocus={() => logic.focusItem(item.id)}
+            onclick={() => singleLogic.toggle(item.id)}
+            onkeydown={(e) => singleLogic.handleKeyDown(e, item.id)}
+            onfocus={() => singleLogic.focusItem(item.id)}
           >
             <span>{item.title}</span>
             <span class="icon" aria-hidden="true">
@@ -93,7 +111,7 @@
               </svg>
             </span>
           </button>
-        </h3>
+        </h4>
 
         <div
           id={panelAttrs.id}
@@ -113,11 +131,91 @@
   <div class="state-debug">
     <strong>State:</strong>
     <code>
-      expanded=[{[...state.current.expandedItems].join(", ")}] |
-      focused={state.current.focusedItemId ?? "none"}
+      expanded=[{[...singleState.current.expandedItems].join(", ")}] |
+      focused={singleState.current.focusedItemId ?? "none"}
+    </code>
+  </div>
+</div>
+
+<!-- Multiple mode -->
+<div class="demo">
+  <h3 class="demo-title">Multiple mode <code>multiple: true</code></h3>
+  <p class="demo-description">Multiple items can be open simultaneously. Expand All / Collapse All buttons work in this mode.</p>
+
+  <div class="accordion" role="presentation">
+    {#each items as item}
+      {@const expanded = multiState.current.expandedItems.has(item.id)}
+      {@const triggerAttrs = multiLogic.aria.triggerAttrs(item.id)}
+      {@const panelAttrs = multiLogic.aria.panelAttrs(item.id)}
+
+      <div class="accordion-item" class:disabled={item.disabled}>
+        <h4 class="accordion-header">
+          <button
+            id={triggerAttrs.id}
+            class="accordion-trigger"
+            class:expanded
+            aria-expanded={expanded}
+            aria-controls={triggerAttrs["aria-controls"]}
+            aria-disabled={item.disabled || undefined}
+            disabled={item.disabled}
+            onclick={() => multiLogic.toggle(item.id)}
+            onkeydown={(e) => multiLogic.handleKeyDown(e, item.id)}
+            onfocus={() => multiLogic.focusItem(item.id)}
+          >
+            <span>{item.title}</span>
+            <span class="icon" aria-hidden="true">
+              <svg
+                class="chevron"
+                class:rotated={expanded}
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 6L8 10L12 6"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
+        </h4>
+
+        <div
+          id={panelAttrs.id}
+          role={panelAttrs.role}
+          aria-labelledby={panelAttrs["aria-labelledby"]}
+          class="accordion-panel"
+          class:expanded
+        >
+          <div class="accordion-content">
+            <p>{item.content}</p>
+          </div>
+        </div>
+      </div>
+    {/each}
+  </div>
+
+  <div class="state-debug">
+    <strong>State:</strong>
+    <code>
+      expanded=[{[...multiState.current.expandedItems].join(", ")}] |
+      focused={multiState.current.focusedItemId ?? "none"}
     </code>
   </div>
 
+  <div class="actions">
+    <button onclick={() => multiLogic.expandAll()}>Expand All</button>
+    <button onclick={() => multiLogic.collapseAll()}>Collapse All</button>
+  </div>
+</div>
+
+<!-- Shared info -->
+<div class="demo">
   <h3>Keyboard navigation</h3>
   <ul class="feature-list">
     <li><kbd>↓</kbd> / <kbd>↑</kbd> — move focus between triggers (wraps around)</li>
@@ -132,11 +230,6 @@
     <li>Panels: <code>role="region"</code>, <code>aria-labelledby</code> → trigger</li>
     <li>Auto-generated unique IDs linking each trigger/panel pair</li>
   </ul>
-
-  <div class="actions">
-    <button onclick={() => logic.expandAll()}>Expand All</button>
-    <button onclick={() => logic.collapseAll()}>Collapse All</button>
-  </div>
 </div>
 
 <style>
@@ -144,6 +237,26 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .demo-title {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .demo-title code {
+    font-size: 0.75rem;
+    font-weight: 400;
+    background: var(--color-bg);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    color: var(--color-text-muted);
+  }
+  .demo-description {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: 0;
   }
   .accordion {
     border: 1px solid var(--color-border);
@@ -196,7 +309,6 @@
     transform: rotate(180deg);
   }
 
-  /* Animated expand/collapse using grid-template-rows */
   .accordion-panel {
     display: grid;
     grid-template-rows: 0fr;
