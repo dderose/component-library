@@ -9,14 +9,35 @@ packages/
   core/            ← Pure TS: state, validation, logic (no framework deps)
   svelte/          ← Svelte 5 components + useLogic adapter
   react-native/    ← React Native components + useLogic hook
+  demo-svelte/     ← SvelteKit demo site showcasing all components
 ```
 
 **The pattern:** Each component has a `*Logic` class in core that manages state via an observable `Store`. Framework packages subscribe to that store using their native reactivity primitives — Svelte runes or React's `useSyncExternalStore`.
+
+## Components
+
+| Component | Core class | Docs |
+|---|---|---|
+| Modal | `ModalLogic` | [docs/components/modal.md](docs/components/modal.md) |
+| TextField | `TextFieldLogic` | — |
+| Checkbox | `CheckboxLogic` | — |
+| RadioGroup | `RadioGroupLogic` | — |
+| Select | `SelectLogic` | — |
+| MultiSelect | `MultiSelectLogic` | — |
+| Accordion | `AccordionLogic` | — |
 
 ## Setup
 
 ```bash
 bun install
+```
+
+## Demo
+
+Run the Svelte demo site to see all components in action:
+
+```bash
+bun run --filter @component-library/demo-svelte dev
 ```
 
 ## Test
