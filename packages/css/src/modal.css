@@ -1,5 +1,5 @@
 /**
- * Modal
+ * Modal — styled after Moon Design System
  *
  * Structure:
  *   .cl-modal-overlay
@@ -17,63 +17,104 @@
  *   .cl-modal-panel--entering
  *   .cl-modal-panel--open
  *   .cl-modal-panel--leaving
+ *
+ * Size modifiers (on .cl-modal-panel):
+ *   .cl-modal-panel--sm    max-width 320px
+ *   (default)              max-width 384px (24rem, matches Moon's max-w-sm)
+ *   .cl-modal-panel--lg    max-width 512px
+ *   .cl-modal-panel--xl    max-width 640px
+ *   .cl-modal-panel--full  max-width 100%
  */
 
-/* ---- Overlay ---- */
+/* ---- Overlay / Backdrop ---- */
 
 .cl-modal-overlay {
   position: fixed;
   inset: 0;
+  z-index: 99999;
+  overflow-y: auto;
   display: flex;
+  min-height: 100%;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0);
-  transition-property: background;
-  transition-timing-function: ease;
+  padding: var(--cl-spacing-sm);
+  background: transparent;
+  transition: background 0.3s ease-out;
 }
 
 .cl-modal-overlay--entering {
-  background: rgba(0, 0, 0, 0);
+  background: transparent;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
 }
 
 .cl-modal-overlay--open {
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--cl-color-overlay);
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
 }
 
 .cl-modal-overlay--leaving {
-  background: rgba(0, 0, 0, 0);
+  background: transparent;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in;
 }
 
 /* ---- Panel ---- */
 
 .cl-modal-panel {
   outline: none;
-  background: var(--cl-color-surface);
+  width: 100%;
+  max-width: 24rem;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--cl-color-bg);
   border-radius: var(--cl-radius-lg);
   box-shadow: var(--cl-shadow-lg);
-  width: 90%;
-  max-width: 440px;
-  overflow: hidden;
   opacity: 0;
   transform: scale(0.95);
   transition-property: opacity, transform;
-  transition-timing-function: ease;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
 }
 
 .cl-modal-panel--entering {
   opacity: 0;
   transform: scale(0.95);
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
 }
 
 .cl-modal-panel--open {
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
 }
 
 .cl-modal-panel--leaving {
   opacity: 0;
   transform: scale(0.95);
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in;
+}
+
+/* ---- Size variants ---- */
+
+.cl-modal-panel--sm {
+  max-width: 20rem;
+}
+
+.cl-modal-panel--lg {
+  max-width: 32rem;
+}
+
+.cl-modal-panel--xl {
+  max-width: 40rem;
+}
+
+.cl-modal-panel--full {
+  max-width: 100%;
 }
 
 /* ---- Header ---- */
@@ -82,14 +123,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--cl-spacing-lg) var(--cl-spacing-xl);
-  border-bottom: 1px solid var(--cl-color-border);
+  padding: var(--cl-spacing-sm) var(--cl-spacing-md);
 }
 
 .cl-modal-header h3,
 .cl-modal-header h2 {
-  font-size: var(--cl-font-size-lg);
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: var(--cl-font-weight-semibold);
+  line-height: var(--cl-line-height);
+  color: var(--cl-color-text);
   margin: 0;
 }
 
@@ -101,7 +143,7 @@
   font-size: 1.25rem;
   cursor: pointer;
   color: var(--cl-color-text-muted);
-  padding: var(--cl-spacing-xs);
+  padding: var(--cl-spacing-2xs);
   line-height: 1;
   border-radius: var(--cl-radius-md);
   transition: color var(--cl-transition-fast), background var(--cl-transition-fast);
@@ -109,7 +151,7 @@
 
 .cl-modal-close:hover {
   color: var(--cl-color-text);
-  background: var(--cl-color-bg);
+  background: var(--cl-color-highlight);
 }
 
 .cl-modal-close:focus-visible {
@@ -120,12 +162,13 @@
 /* ---- Body ---- */
 
 .cl-modal-body {
-  padding: var(--cl-spacing-xl);
+  padding: var(--cl-spacing-sm) var(--cl-spacing-md);
   font-size: var(--cl-font-size-base);
-  line-height: 1.5;
+  line-height: var(--cl-line-height);
+  color: var(--cl-color-text);
   display: flex;
   flex-direction: column;
-  gap: var(--cl-spacing-md);
+  gap: var(--cl-spacing-sm);
 }
 
 /* ---- Footer ---- */
@@ -133,7 +176,6 @@
 .cl-modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--cl-spacing-sm);
-  padding: var(--cl-spacing-md) var(--cl-spacing-xl);
-  border-top: 1px solid var(--cl-color-border);
+  gap: var(--cl-spacing-2xs);
+  padding: var(--cl-spacing-sm) var(--cl-spacing-md);
 }

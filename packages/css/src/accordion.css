@@ -1,5 +1,5 @@
 /**
- * Accordion
+ * Accordion — styled after Moon Design System
  *
  * Structure:
  *   .cl-accordion
@@ -15,54 +15,82 @@
  *   .cl-accordion-item--expanded
  *   .cl-accordion-item--disabled
  *
- * Chevron modifier:
- *   .cl-accordion-chevron--rotated
+ * Size modifiers (on .cl-accordion):
+ *   .cl-accordion--sm
+ *   .cl-accordion--lg
+ *   .cl-accordion--xl
+ *   (default is md)
+ *
+ * Variant modifiers:
+ *   .cl-accordion--content-outside  — content sits below item, not inside card
  */
 
+/* ---- Root ---- */
+
 .cl-accordion {
-  border: 1px solid var(--cl-color-border);
-  border-radius: var(--cl-radius-md);
-  overflow: hidden;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: var(--cl-spacing-2xs);
 }
 
 /* ---- Item ---- */
 
-.cl-accordion-item + .cl-accordion-item {
-  border-top: 1px solid var(--cl-color-border);
+.cl-accordion-item {
+  width: 100%;
 }
 
 .cl-accordion-item--disabled {
-  opacity: 0.5;
+  cursor: not-allowed;
+  opacity: var(--cl-opacity-disabled);
 }
 
 /* ---- Header ---- */
 
 .cl-accordion-header {
+  width: 100%;
   margin: 0;
+  border-radius: var(--cl-radius-md);
+  background: var(--cl-color-bg);
+}
+
+.cl-accordion-item--expanded .cl-accordion-header {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* content-outside: header keeps full radius even when expanded */
+.cl-accordion--content-outside .cl-accordion-item--expanded .cl-accordion-header {
+  border-radius: var(--cl-radius-md);
 }
 
 /* ---- Trigger ---- */
 
 .cl-accordion-trigger {
+  display: flex;
   width: 100%;
-  padding: var(--cl-spacing-md) var(--cl-spacing-lg);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cl-spacing-3xs);
   border: none;
-  background: var(--cl-color-surface);
+  border-radius: inherit;
+  background: transparent;
   font-family: var(--cl-font-family);
   font-size: var(--cl-font-size-base);
-  font-weight: 600;
+  font-weight: var(--cl-font-weight-semibold);
+  line-height: var(--cl-line-height);
   color: var(--cl-color-text);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   outline: none;
   transition: background var(--cl-transition-fast);
+
+  /* md (default) padding */
+  padding: var(--cl-spacing-2xs) var(--cl-spacing-2xs) var(--cl-spacing-2xs) var(--cl-spacing-xs);
 }
 
 .cl-accordion-trigger:hover:not(:disabled) {
-  background: var(--cl-color-bg);
+  background: var(--cl-color-highlight);
 }
 
 .cl-accordion-trigger:focus-visible {
@@ -72,20 +100,33 @@
   position: relative;
 }
 
-.cl-accordion-item--expanded .cl-accordion-trigger {
-  background: var(--cl-color-bg);
-}
-
 .cl-accordion-trigger:disabled {
   cursor: not-allowed;
+}
+
+/* ---- Size variants ---- */
+
+.cl-accordion--sm .cl-accordion-trigger {
+  padding: var(--cl-spacing-3xs) var(--cl-spacing-3xs) var(--cl-spacing-3xs) var(--cl-spacing-xs);
+}
+
+.cl-accordion--lg .cl-accordion-trigger {
+  padding: var(--cl-spacing-xs);
+}
+
+.cl-accordion--xl .cl-accordion-trigger {
+  padding: var(--cl-spacing-sm);
+  font-size: var(--cl-font-size-lg);
 }
 
 /* ---- Chevron ---- */
 
 .cl-accordion-chevron {
-  transition: transform var(--cl-transition-slow);
-  color: var(--cl-color-text-muted);
   flex-shrink: 0;
+  color: var(--cl-color-text-muted);
+  width: 1rem;
+  height: 1rem;
+  transition: transform var(--cl-transition-fast);
 }
 
 .cl-accordion-chevron--rotated {
@@ -97,22 +138,38 @@
 .cl-accordion-panel {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--cl-transition-slow);
+  transition: grid-template-rows var(--cl-transition-fast);
 }
 
 .cl-accordion-item--expanded .cl-accordion-panel {
   grid-template-rows: 1fr;
 }
 
+/* ---- Content ---- */
+
 .cl-accordion-content {
   overflow: hidden;
+  background: var(--cl-color-bg);
+  border-radius: 0 0 var(--cl-radius-md) var(--cl-radius-md);
+  font-size: var(--cl-font-size-base);
+  line-height: var(--cl-line-height);
+  color: var(--cl-color-text);
 }
 
-.cl-accordion-content p,
-.cl-accordion-content div {
-  padding: var(--cl-spacing-md) var(--cl-spacing-lg);
-  margin: 0;
-  font-size: var(--cl-font-size-base);
-  line-height: 1.5;
-  border-top: 1px solid var(--cl-color-border);
+/* Inner padding — applied when panel has content */
+.cl-accordion-item--expanded .cl-accordion-content {
+  padding: 0 var(--cl-spacing-2xs) var(--cl-spacing-2xs) var(--cl-spacing-xs);
+  border-top: var(--cl-border-width) solid var(--cl-color-border);
+}
+
+/* content-outside variant: no card bg, just margin below */
+.cl-accordion--content-outside .cl-accordion-content {
+  background: transparent;
+  border-radius: 0;
+  border-top: none;
+}
+
+.cl-accordion--content-outside .cl-accordion-item--expanded .cl-accordion-content {
+  padding: var(--cl-spacing-2xs) 0 0 0;
+  border-top: none;
 }
