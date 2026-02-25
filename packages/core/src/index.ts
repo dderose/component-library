@@ -22,8 +22,8 @@ export type { SelectState, SelectOptions } from "./components/select";
 export { MultiSelectLogic } from "./components/multi-select";
 export type { MultiSelectState, MultiSelectOptions } from "./components/multi-select";
 
-export { ModalLogic } from "./components/modal";
-export type { ModalState, ModalOptions } from "./components/modal";
+export { ModalLogic, getFocusableElements, trapFocus, lockScroll, unlockScroll, resetModalIdCounter } from "./components/modal";
+export type { ModalState, ModalStatus, ModalAria, ModalOptions } from "./components/modal";
 
 export { AccordionLogic } from "./components/accordion";
 export type { AccordionState, AccordionOptions } from "./components/accordion";
