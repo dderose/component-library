@@ -41,6 +41,10 @@ export default function RootLayout() {
           options={{ title: "MultiSelect", tabBarLabel: "Multi" }}
         />
         <Tabs.Screen
+          name="modal"
+          options={{ title: "Modal", tabBarLabel: "Modal" }}
+        />
+        <Tabs.Screen
           name="accordion"
           options={{ title: "Accordion", tabBarLabel: "Accordion" }}
         />
