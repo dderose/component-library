@@ -6,10 +6,11 @@ A headless, framework-agnostic component library. Business logic lives in **pure
 
 ```
 packages/
-  core/            ← Pure TS: state, validation, logic (no framework deps)
-  svelte/          ← Svelte 5 adapter: useLogic, actions, wrapper components
-  react-native/    ← React Native adapter: useLogic hook
-  demo-svelte/     ← SvelteKit demo site showcasing all components
+  core/              ← Pure TS: state, validation, logic (no framework deps)
+  svelte/            ← Svelte 5 adapter: useLogic, actions, wrapper components
+  react-native/      ← React Native adapter: useLogic hook
+  demo-svelte/       ← SvelteKit demo site showcasing all components
+  demo-react-native/ ← Expo demo app showcasing all components
 ```
 
 **The pattern:** Each component has a `*Logic` class in core that manages state via an observable `Store`. Framework packages subscribe to that store using their native reactivity primitives — Svelte 5 runes or React's `useSyncExternalStore`.
@@ -52,11 +53,24 @@ bun install
 
 ## Demo
 
+### Svelte
+
 Run the SvelteKit demo site to see all components in action:
 
 ```bash
 bun run --filter @component-library/demo-svelte dev
 ```
+
+### React Native
+
+Run the Expo demo app:
+
+```bash
+cd packages/demo-react-native
+npx expo start
+```
+
+Then press `i` for iOS simulator, `a` for Android emulator, or `w` for web.
 
 ## Test
 

@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Component Library Demo",
+    "slug": "component-library-demo",
+    "version": "1.0.0",
+    "scheme": "component-library-demo",
+    "platforms": ["ios", "android", "web"],
+    "newArchEnabled": true,
+    "experiments": {
+      "typedRoutes": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router"]
+  }
+}
