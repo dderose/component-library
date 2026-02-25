@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useLogic, clickOutside, portal } from "@component-library/svelte";
+  import { useLogic, clickOutside } from "@component-library/svelte";
   import { MultiSelectLogic } from "@component-library/core";
   import type { MultiSelectOption } from "@component-library/core";
 
@@ -85,7 +85,6 @@
         id={aria.listbox.id}
         aria-multiselectable="true"
         aria-labelledby={aria.labelId}
-        use:portal
       >
         {#each frameworks as opt, i}
           <li

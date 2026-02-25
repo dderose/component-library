@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useLogic, clickOutside, portal } from "@component-library/svelte";
+  import { useLogic, clickOutside } from "@component-library/svelte";
   import { SelectLogic } from "@component-library/core";
   import type { SelectOption } from "@component-library/core";
 
@@ -73,7 +73,6 @@
         role={aria.listbox.role}
         id={aria.listbox.id}
         aria-labelledby={aria.labelId}
-        use:portal
       >
         {#each fruits as opt, i}
           <li
