@@ -26,6 +26,7 @@ packages/
 | MultiSelect | `MultiSelectLogic` | Keyboard nav, ARIA, multi-selection, tag removal | [docs](docs/components/multi-select.md) |
 | Modal | `ModalLogic` | Status state machine, focus trap, scroll lock, ARIA | [docs](docs/components/modal.md) |
 | Accordion | `AccordionLogic` | Keyboard nav, ARIA, animated expand/collapse, disabled items | [docs](docs/components/accordion.md) |
+| Button | `ButtonLogic` | Async loading state, disabled, pressed tracking | [docs](docs/components/button.md) |
 
 ## Core utilities
 

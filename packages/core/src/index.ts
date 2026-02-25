@@ -27,3 +27,6 @@ export type { ModalState, ModalStatus, ModalAria, ModalOptions } from "./compone
 
 export { AccordionLogic, resetAccordionIdCounter } from "./components/accordion";
 export type { AccordionState, AccordionItem, AccordionAria, AccordionOptions } from "./components/accordion";
+
+export { ButtonLogic } from "./components/button";
+export type { ButtonState, ButtonOptions } from "./components/button";

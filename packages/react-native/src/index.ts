@@ -19,6 +19,7 @@ export {
   MultiSelectLogic,
   ModalLogic,
   AccordionLogic,
+  ButtonLogic,
 
   // DOM helpers (for web — not used in RN, but available)
   getFocusableElements,
@@ -61,4 +62,6 @@ export type {
   AccordionItem,
   AccordionAria,
   AccordionOptions,
+  ButtonState,
+  ButtonOptions,
 } from "@component-library/core";
