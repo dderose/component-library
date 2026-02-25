@@ -275,6 +275,7 @@
                 class="option"
                 class:highlighted={reasonState.current.highlightedIndex === i}
                 class:selected={reasonState.current.value === opt.value}
+                onmousedown={(e) => e.preventDefault()}
                 onmouseenter={() => reasonLogic.highlightIndex(i)}
                 onclick={() => reasonLogic.setValue(opt.value)}
               >
@@ -348,6 +349,7 @@
                 class="option"
                 class:highlighted={topicsState.current.highlightedIndex === i}
                 class:selected={topicsState.current.value.includes(opt.value)}
+                onmousedown={(e) => e.preventDefault()}
                 onmouseenter={() => topicsLogic.highlightIndex(i)}
                 onclick={() => topicsLogic.toggleItem(opt.value)}
               >

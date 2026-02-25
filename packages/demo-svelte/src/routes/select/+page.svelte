@@ -83,6 +83,7 @@
             class="option"
             class:highlighted={state.current.highlightedIndex === i}
             class:selected={state.current.value === opt.value}
+            onmousedown={(e) => e.preventDefault()}
             onmouseenter={() => logic.highlightIndex(i)}
             onclick={() => logic.setValue(opt.value)}
           >

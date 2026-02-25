@@ -225,11 +225,18 @@ export class MultiSelectLogic<T extends string = string>
   }
 
   closeMenu(): void {
-    this.store.setState((prev) => ({
-      ...prev,
-      open: false,
-      highlightedIndex: -1,
-    }));
+    this.store.setState((prev) => {
+      const next: MultiSelectState<T> = {
+        ...prev,
+        open: false,
+        highlightedIndex: -1,
+        touched: true,
+      };
+      if (this.validateOnBlur) {
+        next.validation = runValidation(prev.value, this.rules);
+      }
+      return next;
+    });
   }
 
   toggleMenu(): void {
@@ -360,10 +367,8 @@ export class MultiSelectLogic<T extends string = string>
         ...prev,
         focused: false,
         touched: true,
-        open: false,
-        highlightedIndex: -1,
       };
-      if (this.validateOnBlur) {
+      if (this.validateOnBlur && !prev.open) {
         next.validation = runValidation(prev.value, this.rules);
       }
       return next;

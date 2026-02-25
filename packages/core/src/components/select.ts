@@ -193,11 +193,18 @@ export class SelectLogic<T extends string = string>
   }
 
   closeMenu(): void {
-    this.store.setState((prev) => ({
-      ...prev,
-      open: false,
-      highlightedIndex: -1,
-    }));
+    this.store.setState((prev) => {
+      const next: SelectState<T> = {
+        ...prev,
+        open: false,
+        highlightedIndex: -1,
+        touched: true,
+      };
+      if (this.validateOnBlur) {
+        next.validation = runValidation(prev.value, this.rules);
+      }
+      return next;
+    });
   }
 
   toggleMenu(): void {
@@ -328,14 +335,15 @@ export class SelectLogic<T extends string = string>
 
   blur(): void {
     this.store.setState((prev) => {
+      // Don't close the menu on blur — the menu stays open so that
+      // option clicks can register before the element is removed.
+      // clickOutside / Tab / Escape handle closing instead.
       const next: SelectState<T> = {
         ...prev,
         focused: false,
         touched: true,
-        open: false,
-        highlightedIndex: -1,
       };
-      if (this.validateOnBlur) {
+      if (this.validateOnBlur && !prev.open) {
         next.validation = runValidation(prev.value, this.rules);
       }
       return next;

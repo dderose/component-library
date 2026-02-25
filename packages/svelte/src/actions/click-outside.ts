@@ -33,15 +33,16 @@ export function clickOutside(node: HTMLElement, params: ClickOutsideParams) {
     }
   }
 
-  // Use capture phase so we catch clicks before they're stopped.
-  document.addEventListener("click", handleClick, true);
+  // Use bubble phase so that clicks on child elements (e.g. dropdown options)
+  // fire their own handlers before this outside-click handler runs.
+  document.addEventListener("click", handleClick);
 
   return {
     update(newParams: ClickOutsideParams) {
       parse(newParams);
     },
     destroy() {
-      document.removeEventListener("click", handleClick, true);
+      document.removeEventListener("click", handleClick);
     },
   };
 }
