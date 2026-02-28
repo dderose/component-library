@@ -21,6 +21,8 @@ This demo showcases the **headless component pattern** in a React / Next.js cont
 | `/checkbox`      | `CheckboxLogic` with toggle                                  |
 | `/radio-group`   | `RadioGroupLogic` with single selection                      |
 | `/select`        | `SelectLogic` with keyboard nav, highlighting, dropdown      |
+| `/multi-select`  | `MultiSelectLogic` with tags, keyboard nav, validation       |
+| `/button`        | `ButtonLogic` with async loading, disabled, pressed states   |
 | `/accordion`     | `AccordionLogic` in single and multiple mode                 |
 | `/modal`         | `ModalLogic` with portal, focus trap, transitions            |
 | `/contact-form`  | All components together in a realistic form + modal           |

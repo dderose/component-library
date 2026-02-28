@@ -95,7 +95,7 @@ Run the Next.js 15 demo (App Router) to see the React web adapter in action:
 bun run --filter @component-library/demo-next dev
 ```
 
-Pages: TextField, Checkbox, RadioGroup, Select, Accordion, Modal, Contact Form. Each page demonstrates the headless pattern — `useLogic` bridges core logic into React, and `@component-library/css` provides Moon DS styling.
+Pages: TextField, Checkbox, RadioGroup, Select, MultiSelect, Button, Accordion, Modal, Contact Form. Each page demonstrates the headless pattern — `useLogic` bridges core logic into React, and `@component-library/css` provides Moon DS styling.
 
 ## Test
 

@@ -17,6 +17,8 @@ const navItems = [
   { href: "/checkbox", label: "Checkbox" },
   { href: "/radio-group", label: "RadioGroup" },
   { href: "/select", label: "Select" },
+  { href: "/multi-select", label: "MultiSelect" },
+  { href: "/button", label: "Button" },
   { href: "/accordion", label: "Accordion" },
   { href: "/modal", label: "Modal" },
   { href: "/contact-form", label: "Contact Form" },
