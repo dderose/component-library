@@ -11,6 +11,7 @@ import {
   ModalLogic,
   modal as cls,
   useLogic,
+  useStableId,
   lockScroll,
   unlockScroll,
   trapFocus,
@@ -35,14 +36,16 @@ export function Modal({ options = {}, trigger, children }: ModalProps) {
     setMounted(true);
   }, []);
 
+  const id = useStableId();
   const [state, logic] = useLogic(
     () =>
       new ModalLogic({
         closeOnOverlayClick: true,
         closeOnEscape: true,
         ...options,
-        onOpening: () => lockScroll(),
-        onClosing: () => unlockScroll(),
+        id,
+        onOpen: () => lockScroll(),
+        onClose: () => unlockScroll(),
       }),
   );
 

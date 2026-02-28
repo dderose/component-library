@@ -5,6 +5,7 @@ import {
   MultiSelectLogic,
   multiSelect as cls,
   useLogic,
+  useStableId,
   type MultiSelectOption,
   type MultiSelectOptions,
 } from "@component-library/react";
@@ -22,8 +23,9 @@ export function MultiSelect<T extends string>({
   options,
   selectOptions = {},
 }: MultiSelectProps<T>) {
+  const id = useStableId();
   const [state, logic] = useLogic(
-    () => new MultiSelectLogic<T>({ ...selectOptions, options }),
+    () => new MultiSelectLogic<T>({ ...selectOptions, id, options }),
   );
 
   const { aria } = logic;
@@ -56,11 +58,13 @@ export function MultiSelect<T extends string>({
       </label>
 
       <div className={cls.wrapper}>
-        <button
-          ref={triggerRef}
+        {/* Trigger area — uses a div+role instead of <button> to allow
+            tag-remove buttons inside without nesting violations */}
+        <div
+          ref={triggerRef as React.RefObject<HTMLDivElement>}
           className={cls.trigger}
-          type="button"
           role={aria.trigger.role}
+          tabIndex={0}
           aria-haspopup={aria.trigger["aria-haspopup"]}
           aria-expanded={state.open}
           aria-controls={aria.trigger["aria-controls"]}
@@ -71,9 +75,7 @@ export function MultiSelect<T extends string>({
           }
           aria-labelledby={aria.labelId}
           onClick={() => logic.toggleMenu()}
-          onKeyDown={(e) =>
-            logic.handleKeyDown(e as unknown as KeyboardEvent)
-          }
+          onKeyDown={(e) => logic.handleKeyDown(e.nativeEvent)}
           onFocus={() => logic.focus()}
           onBlur={() => logic.blur()}
         >
@@ -84,6 +86,7 @@ export function MultiSelect<T extends string>({
                   {getLabelForValue(tag)}
                   <button
                     className={cls.tagRemove}
+                    type="button"
                     tabIndex={-1}
                     aria-label={`Remove ${getLabelForValue(tag)}`}
                     onClick={(e) => {
@@ -102,7 +105,7 @@ export function MultiSelect<T extends string>({
           <span className={cls.chevron} aria-hidden="true">
             {state.open ? "▲" : "▼"}
           </span>
-        </button>
+        </div>
 
         {state.open && (
           <ul

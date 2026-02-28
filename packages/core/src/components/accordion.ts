@@ -31,6 +31,8 @@ export interface AccordionAria {
 }
 
 export interface AccordionOptions {
+  /** Stable instance ID for ARIA attributes. Required for SSR to avoid hydration mismatches. Falls back to generateId() if not provided. */
+  id?: string;
   /** Items expanded on mount. @default [] */
   initialExpanded?: string[];
   /** Registered items with their IDs and disabled state. */
@@ -58,6 +60,7 @@ export class AccordionLogic implements ComponentLogic<AccordionState> {
 
   constructor(options: AccordionOptions = {}) {
     const {
+      id,
       initialExpanded = [],
       items = [],
       multiple = false,
@@ -70,7 +73,7 @@ export class AccordionLogic implements ComponentLogic<AccordionState> {
     this.collapsible = collapsible;
     this.onChange = onChange;
 
-    this.instanceId = generateId("accordion");
+    this.instanceId = id ?? generateId("accordion");
 
     this.aria = {
       triggerAttrs: (itemId: string) => {

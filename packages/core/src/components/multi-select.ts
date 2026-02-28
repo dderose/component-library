@@ -45,6 +45,8 @@ export interface MultiSelectAria {
 }
 
 export interface MultiSelectOptions<T extends string = string> {
+  /** Stable instance ID for ARIA attributes. Required for SSR to avoid hydration mismatches. */
+  id?: string;
   initialValue?: T[];
   options?: MultiSelectOption<T>[];
   rules?: ValidationRule<T[]>[];
@@ -68,6 +70,7 @@ export class MultiSelectLogic<T extends string = string>
 
   constructor(options: MultiSelectOptions<T> = {}) {
     const {
+      id,
       initialValue = [],
       options: selectOptions = [],
       rules = [],
@@ -80,7 +83,7 @@ export class MultiSelectLogic<T extends string = string>
     this.validateOnChange = validateOnChange;
     this.validateOnBlur = validateOnBlur;
 
-    const instanceId = generateId("multiselect");
+    const instanceId = id ?? generateId("multiselect");
     this.aria = {
       trigger: {
         role: "combobox",

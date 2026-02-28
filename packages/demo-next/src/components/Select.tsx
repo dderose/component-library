@@ -5,6 +5,7 @@ import {
   SelectLogic,
   select as cls,
   useLogic,
+  useStableId,
   type SelectOption,
   type SelectOptions,
 } from "@component-library/react";
@@ -22,8 +23,9 @@ export function Select<T>({
   options,
   selectOptions = {},
 }: SelectProps<T>) {
+  const id = useStableId();
   const [state, logic] = useLogic(
-    () => new SelectLogic<T>({ ...selectOptions, options }),
+    () => new SelectLogic<T>({ ...selectOptions, id, options }),
   );
 
   const triggerRef = useRef<HTMLButtonElement>(null);

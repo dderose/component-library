@@ -5,6 +5,7 @@ import {
   AccordionLogic,
   accordion as cls,
   useLogic,
+  useStableId,
   type AccordionItem,
   type AccordionOptions,
 } from "@component-library/react";
@@ -34,10 +35,12 @@ interface AccordionProps {
 }
 
 export function Accordion({ items, options = {} }: AccordionProps) {
+  const id = useStableId();
   const [state, logic] = useLogic(
     () =>
       new AccordionLogic({
         ...options,
+        id,
         items,
       }),
   );

@@ -1,5 +1,5 @@
 import type { ComponentLogic } from "@component-library/core";
-import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from "react";
 
 /**
  * Bridges any core ComponentLogic instance into React's reactivity system.
@@ -44,4 +44,20 @@ export function useLogic<TState>(
   const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   return [state, logic];
+}
+
+/**
+ * Returns a stable ID string suitable for passing as the `id` option to any
+ * core Logic class. Uses React.useId() under the hood so the value is
+ * identical on server and client, preventing hydration mismatches.
+ *
+ * Usage:
+ *   const id = useStableId();
+ *   const [state, logic] = useLogic(() => new AccordionLogic({ id, items }));
+ */
+export function useStableId(): string {
+  // React's useId returns something like ":r0:" — strip the colons for
+  // cleaner DOM ids and ARIA references.
+  const reactId = useId();
+  return reactId.replace(/:/g, "");
 }

@@ -43,6 +43,8 @@ export interface SelectAria {
 }
 
 export interface SelectOptions<T extends string = string> {
+  /** Stable instance ID for ARIA attributes. Required for SSR to avoid hydration mismatches. */
+  id?: string;
   initialValue?: T | null;
   options?: SelectOption<T>[];
   rules?: ValidationRule<T | null>[];
@@ -64,6 +66,7 @@ export class SelectLogic<T extends string = string> implements ComponentLogic<Se
 
   constructor(options: SelectOptions<T> = {}) {
     const {
+      id,
       initialValue = null,
       options: selectOptions = [],
       rules = [],
@@ -76,7 +79,7 @@ export class SelectLogic<T extends string = string> implements ComponentLogic<Se
     this.validateOnChange = validateOnChange;
     this.validateOnBlur = validateOnBlur;
 
-    const instanceId = generateId("select");
+    const instanceId = id ?? generateId("select");
     this.aria = {
       trigger: {
         role: "combobox",

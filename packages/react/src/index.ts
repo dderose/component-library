@@ -82,4 +82,4 @@ export {
 
 // ---- React hook ----
 
-export { useLogic } from "./use-logic";
+export { useLogic, useStableId } from "./use-logic";

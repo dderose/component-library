@@ -37,6 +37,8 @@ export interface ModalAria {
 }
 
 export interface ModalOptions {
+  /** Stable instance ID for ARIA attributes. Required for SSR to avoid hydration mismatches. */
+  id?: string;
   /** Start in the open state. @default false */
   initialOpen?: boolean;
   /** Close when the backdrop / overlay is clicked. @default true */
@@ -178,6 +180,7 @@ export class ModalLogic implements ComponentLogic<ModalState> {
 
   constructor(options: ModalOptions = {}) {
     const {
+      id,
       initialOpen = false,
       closeOnOverlayClick = true,
       closeOnEscape = true,
@@ -192,7 +195,7 @@ export class ModalLogic implements ComponentLogic<ModalState> {
     this.onOpen = onOpen;
     this.onClose = onClose;
 
-    const instanceId = generateId("modal");
+    const instanceId = id ?? generateId("modal");
     this.aria = {
       overlay: { role: "presentation" },
       dialog: {
