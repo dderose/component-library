@@ -7,13 +7,16 @@ A headless, framework-agnostic component library. Business logic lives in **pure
 ```
 packages/
   core/              ← Pure TS: state, validation, keyboard nav, ARIA (no framework deps)
+  css/               ← Framework-agnostic CSS: Moon Design System tokens + component styles
   svelte/            ← Svelte 5 adapter: useLogic, actions, wrapper components
+  react/             ← React (web) adapter: useLogic hook
   react-native/      ← React Native adapter: useLogic hook
   demo-svelte/       ← SvelteKit demo site showcasing all components
+  demo-next/         ← Next.js 15 (App Router) demo showcasing all components
   demo-react-native/ ← Expo demo app showcasing all components
 ```
 
-**The pattern:** Each component has a `*Logic` class in core that manages state via an observable `Store`. Framework packages subscribe to that store using their native reactivity primitives — Svelte 5 runes (`$state`) or React's `useSyncExternalStore`. The logic classes handle keyboard navigation, ARIA attribute generation, validation, and all state transitions; the UI layer just wires up events and renders.
+**The pattern:** Each component has a `*Logic` class in core that manages state via an observable `Store`. Framework packages subscribe to that store using their native reactivity primitives — Svelte 5 runes (`$state`) or React's `useSyncExternalStore`. The logic classes handle keyboard navigation, ARIA attribute generation, validation, and all state transitions; the UI layer just wires up events and renders. The `@component-library/css` package provides Moon Design System styled CSS that works with any framework.
 
 ## Components
 
@@ -83,6 +86,16 @@ npx expo start
 ```
 
 Then press `i` for iOS simulator, `a` for Android emulator, or `w` for web.
+
+### Next.js
+
+Run the Next.js 15 demo (App Router) to see the React web adapter in action:
+
+```bash
+bun run --filter @component-library/demo-next dev
+```
+
+Pages: TextField, Checkbox, RadioGroup, Select, Accordion, Modal, Contact Form. Each page demonstrates the headless pattern — `useLogic` bridges core logic into React, and `@component-library/css` provides Moon DS styling.
 
 ## Test
 
@@ -196,14 +209,56 @@ field.blur();
 field.validate();
 ```
 
+### React (Next.js / web)
+
+```tsx
+"use client";
+
+import { useLogic } from "@component-library/react";
+import { TextFieldLogic, textfield } from "@component-library/react";
+import type { ValidationRule } from "@component-library/react";
+
+const required = (): ValidationRule<string> => ({
+  name: "required",
+  validate: (v) => (v.trim() ? null : "Required"),
+});
+
+function MyField() {
+  const [state, logic] = useLogic(
+    () => new TextFieldLogic({ rules: [required()], validateOnBlur: true })
+  );
+
+  return (
+    <div className={textfield.root(state)}>
+      <label className={textfield.label}>Username</label>
+      <input
+        className={textfield.input}
+        value={state.value}
+        onChange={(e) => logic.setValue(e.target.value)}
+        onFocus={() => logic.focus()}
+        onBlur={() => logic.blur()}
+      />
+      {!state.validation.valid && state.touched && (
+        <ul className={textfield.errors}>
+          {state.validation.errors.map((err, i) => (
+            <li key={i} className={textfield.error}>{err}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+```
+
 ## Adding a new component
 
 1. **Core:** Create `packages/core/src/components/my-component.ts` with a `MyComponentLogic` class implementing `ComponentLogic<TState>`
 2. **Test:** Add `packages/core/tests/my-component.test.ts`
 3. **Svelte:** Create a `.svelte` demo page or wrapper, use `useLogic()` to bridge
-4. **React Native:** Create a `.tsx` screen, use `useLogic()` to bridge
-5. **Export:** Add to each package's `index.ts`
-6. **Docs:** Add `docs/components/my-component.md`
+4. **React:** Create a `.tsx` component, use `useLogic()` from `@component-library/react`
+5. **React Native:** Create a `.tsx` screen, use `useLogic()` from `@component-library/react-native`
+6. **Export:** Add to each package's `index.ts`
+7. **Docs:** Add `docs/components/my-component.md`
 
 ## Adding a new framework adapter
 

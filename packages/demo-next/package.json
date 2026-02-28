@@ -1,0 +1,23 @@
+{
+  "name": "@component-library/demo-next",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@component-library/core": "workspace:*",
+    "@component-library/css": "workspace:*",
+    "@component-library/react": "workspace:*",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.5.0"
+  }
+}
