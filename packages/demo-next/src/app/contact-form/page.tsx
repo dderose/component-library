@@ -127,11 +127,15 @@ export default function ContactFormPage() {
         </p>
 
         <Modal
-          trigger={
-            <button className="cl-button cl-button--secondary">
+          trigger={({ onClick, ref }) => (
+            <button
+              ref={ref as React.RefObject<HTMLButtonElement>}
+              className="cl-button cl-button--secondary"
+              onClick={onClick}
+            >
               Delete Account…
             </button>
-          }
+          )}
         >
           {({ close, titleId, descriptionId }) => (
             <>

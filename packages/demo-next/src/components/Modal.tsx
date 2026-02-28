@@ -19,7 +19,7 @@ import { createPortal } from "react-dom";
 
 interface ModalProps {
   options?: ModalOptions;
-  trigger: ReactNode;
+  trigger: (props: { onClick: () => void; ref: React.RefObject<HTMLElement | null> }) => ReactNode;
   children: (api: {
     close: () => void;
     titleId: string;
@@ -40,7 +40,7 @@ export function Modal({ options = {}, trigger, children }: ModalProps) {
   );
 
   const dialogRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement>(null);
 
   // Focus trap + escape key
   useEffect(() => {
@@ -69,10 +69,7 @@ export function Modal({ options = {}, trigger, children }: ModalProps) {
   // Restore focus on close
   useEffect(() => {
     if (state.status === "closed" && state.hasOpened) {
-      const trigger = triggerRef.current?.querySelector<HTMLElement>(
-        "button, [tabindex]",
-      );
-      trigger?.focus();
+      triggerRef.current?.focus();
     }
   }, [state.status, state.hasOpened]);
 
@@ -99,9 +96,7 @@ export function Modal({ options = {}, trigger, children }: ModalProps) {
 
   return (
     <>
-      <div ref={triggerRef} onClick={() => logic.open()}>
-        {trigger}
-      </div>
+      {trigger({ onClick: () => logic.open(), ref: triggerRef })}
 
       {state.status !== "closed" &&
         createPortal(

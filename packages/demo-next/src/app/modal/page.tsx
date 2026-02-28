@@ -15,11 +15,15 @@ export default function ModalPage() {
         </p>
 
         <Modal
-          trigger={
-            <button className="cl-button cl-button--primary">
+          trigger={({ onClick, ref }) => (
+            <button
+              ref={ref as React.RefObject<HTMLButtonElement>}
+              className="cl-button cl-button--primary"
+              onClick={onClick}
+            >
               Open Modal
             </button>
-          }
+          )}
         >
           {({ close, titleId, descriptionId }) => (
             <>
