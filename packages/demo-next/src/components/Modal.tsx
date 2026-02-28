@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useState,
   useEffect,
   useRef,
   useCallback,
@@ -28,6 +29,12 @@ interface ModalProps {
 }
 
 export function Modal({ options = {}, trigger, children }: ModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [state, logic] = useLogic(
     () =>
       new ModalLogic({
@@ -98,7 +105,8 @@ export function Modal({ options = {}, trigger, children }: ModalProps) {
     <>
       {trigger({ onClick: () => logic.open(), ref: triggerRef })}
 
-      {state.status !== "closed" &&
+      {mounted &&
+        state.status !== "closed" &&
         createPortal(
           <div
             className={overlayClass}

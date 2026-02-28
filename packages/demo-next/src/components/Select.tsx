@@ -72,7 +72,7 @@ export function Select<T>({
           aria-controls={triggerAria["aria-controls"]}
           onClick={() => logic.toggleMenu()}
           onKeyDown={(e) =>
-            logic.handleKeyDown(e as unknown as KeyboardEvent)
+            logic.handleKeyDown(e.nativeEvent)
           }
           onFocus={() => logic.focus()}
           onBlur={() => logic.blur()}

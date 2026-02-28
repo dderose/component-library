@@ -75,12 +75,12 @@ export function Accordion({ items, options = {} }: AccordionProps) {
                 aria-disabled={item.disabled || undefined}
                 disabled={item.disabled}
                 onClick={() => logic.toggle(item.id)}
-                onKeyDown={(e) =>
+                onKeyDown={(e) => {
                   logic.handleKeyDown(
-                    e as unknown as KeyboardEvent,
+                    e.nativeEvent,
                     item.id,
-                  )
-                }
+                  );
+                }}
                 onFocus={() => logic.focusItem(item.id)}
               >
                 <span>{item.title}</span>
