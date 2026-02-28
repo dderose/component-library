@@ -1,5 +1,5 @@
 import type { ComponentLogic } from "@component-library/core";
-import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useSyncExternalStore } from "react";
 
 /**
  * Bridges any core ComponentLogic instance into React's reactivity system.
@@ -12,8 +12,6 @@ import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from "rea
  *
  * Usage:
  *   const [state, logic] = useLogic(() => new TextFieldLogic({ rules: [required()] }));
- *
- * The factory function ensures a single instance per component lifecycle.
  */
 export function useLogic<TState>(
   factory: () => ComponentLogic<TState>,
@@ -26,22 +24,46 @@ export function useLogic<TState>(
 
   const logic = logicRef.current;
 
+  // Stable function references for useSyncExternalStore. Since logic is the
+  // same instance for the entire component lifecycle, these bound methods
+  // have stable identity — no re-subscription every render.
+  const stableRef = useRef({
+    subscribe: (cb: () => void) => logic.subscribe(cb),
+    getSnapshot: () => logic.getState(),
+  });
+
+  // Track whether the component is mounted. In strict mode React runs
+  // mount → cleanup → mount. We only want to destroy on the *final*
+  // unmount, not on strict mode's simulated cleanup. We use a ref
+  // counter: increment on mount, decrement on cleanup. Only destroy
+  // when the counter reaches 0 after a cleanup.
+  const mountCount = useRef(0);
+
   useEffect(() => {
+    mountCount.current++;
+
     return () => {
-      logic.destroy();
-      logicRef.current = null;
+      mountCount.current--;
+
+      // Use a microtask to check if this was a real unmount vs strict
+      // mode cleanup. If strict mode re-mounts, mountCount will be
+      // incremented again synchronously before this microtask runs.
+      // If it's a real unmount, mountCount stays at 0.
+      queueMicrotask(() => {
+        if (mountCount.current === 0 && logicRef.current) {
+          logicRef.current.destroy();
+          logicRef.current = null;
+        }
+      });
     };
-  }, [logic]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // These must be stable references — if subscribe changes identity every
-  // render, useSyncExternalStore will unsubscribe/resubscribe in a loop.
-  const subscribe = useCallback(
-    (callback: () => void) => logic.subscribe(callback),
-    [logic],
+  const state = useSyncExternalStore(
+    stableRef.current.subscribe,
+    stableRef.current.getSnapshot,
+    stableRef.current.getSnapshot,
   );
-  const getSnapshot = useCallback(() => logic.getState(), [logic]);
-
-  const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   return [state, logic];
 }
@@ -56,8 +78,6 @@ export function useLogic<TState>(
  *   const [state, logic] = useLogic(() => new AccordionLogic({ id, items }));
  */
 export function useStableId(): string {
-  // React's useId returns something like ":r0:" — strip the colons for
-  // cleaner DOM ids and ARIA references.
   const reactId = useId();
   return reactId.replace(/:/g, "");
 }

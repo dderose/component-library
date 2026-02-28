@@ -12,7 +12,6 @@ packages/
   react/             ← React (web) adapter: useLogic hook
   react-native/      ← React Native adapter: useLogic hook
   demo-svelte/       ← SvelteKit demo site showcasing all components
-  demo-next/         ← Next.js 15 (App Router) demo showcasing all components
   demo-react-native/ ← Expo demo app showcasing all components
 ```
 
@@ -86,16 +85,6 @@ npx expo start
 ```
 
 Then press `i` for iOS simulator, `a` for Android emulator, or `w` for web.
-
-### Next.js
-
-Run the Next.js 15 demo (App Router) to see the React web adapter in action:
-
-```bash
-bun run --filter @component-library/demo-next dev
-```
-
-Pages: TextField, Checkbox, RadioGroup, Select, MultiSelect, Button, Accordion, Modal, Contact Form. Each page demonstrates the headless pattern — `useLogic` bridges core logic into React, and `@component-library/css` provides Moon DS styling.
 
 ## Test
 
@@ -209,7 +198,7 @@ field.blur();
 field.validate();
 ```
 
-### React (Next.js / web)
+### React (web)
 
 ```tsx
 "use client";
